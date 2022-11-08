@@ -23,6 +23,11 @@ public class TransactionRewardService {
     @Autowired
     ServiceUtil serviceUtil;
 
+    /**
+     * This method accepts only single transaction
+     * @param rewardTransactions - Single transaction object will be passed
+     * @return - Newly created transaction record will be returned
+     */
     public RewardTransactions createTransaction(RewardTransactions rewardTransactions) {
 
         rewardTransactions.setCreatedDate(new Date());
@@ -30,6 +35,12 @@ public class TransactionRewardService {
         return transactionsRepository.save(rewardTransactions);
     }
 
+    /**
+     * This method updates transaction status only in any transaction record.
+     * Accepted values are APPROVED or DECLINE
+     * @param rewardTransactions - Transaction that needs to be updated
+     * @return - Updated transaction record will be returned
+     */
     public RewardTransactions updateCustomerRewardTransaction(RewardTransactions rewardTransactions) {
 
         RewardTransactions rewardTrans = transactionsRepository
@@ -42,12 +53,14 @@ public class TransactionRewardService {
         return transactionsRepository.save(rewardTrans);
     }
 
+    /**
+     * Gets the summary for last 3 months, for only transactions that are approved
+     * @param custId - Searches based on the custId
+     * @return - List of CustomerRewardSummary
+     */
     public List<CustomerRewardSummary> getRewardSummary(Long custId) {
 
-        List<CustomerRewardSummary> rewardTransactionsList = transactionsRepository.getRewardSummaryById(custId);
-        log.info("Size of the transactionsList : {} ", rewardTransactionsList.size());
-        return rewardTransactionsList;
-        //return transactionsRepository.getRewardSummaryById(custId);
+        return transactionsRepository.getRewardSummaryById(custId);
     }
 
     public TransactionRewardService(TransactionsRepository transactionsRepository, ServiceUtil serviceUtil) {

@@ -1,6 +1,7 @@
 package com.retail.rewards.service;
 
 import com.retail.rewards.model.Customer;
+import com.retail.rewards.model.CustomerRewardSummary;
 import com.retail.rewards.model.RewardTransactions;
 import com.retail.rewards.repository.TransactionsRepository;
 import com.retail.rewards.util.Constants;
@@ -13,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.times;
@@ -79,13 +82,46 @@ public class TransactionRewardServiceTest {
         Mockito.when(transactionsRepositoryMock.save(Mockito.any(RewardTransactions.class))).thenReturn(rewardTransactionObject);
         Mockito.when(serviceUtilMock.getTransactionRewardPoints(Mockito.anyDouble())).thenReturn(Mockito.anyDouble());
 
-        RewardTransactions reward = transactionRewardService.createTransaction(rewardTrans);
+        RewardTransactions reward = transactionRewardService.updateCustomerRewardTransaction(rewardTrans);
 
         ArgumentCaptor<RewardTransactions> rewardTransactionsArgumentCaptor = ArgumentCaptor.forClass(RewardTransactions.class);
         Mockito.verify(transactionsRepositoryMock, times(1)).save(rewardTransactionsArgumentCaptor.capture());
 
         Assert.assertEquals(rewardTransactionObject, reward);
         Assert.assertEquals(Constants.TRANSACTION_DECLINE, reward.getTransStatus());
+    }
+
+    @Test
+    public void updateTransaction_Null() {
+
+        Long id = Long.valueOf(1);
+
+        when(transactionsRepositoryMock.findById(id)).thenReturn(Optional.empty());
+
+        Customer customer = Customer.builder().id(Long.valueOf(5)).build();
+        RewardTransactions rewardTrans = RewardTransactions.builder()
+                .id(id)
+                .customer(customer)
+                .transAmount(151.5)
+                .transStatus(Constants.TRANSACTION_DECLINE)
+                .build();
+        Mockito.when(serviceUtilMock.getTransactionRewardPoints(Mockito.anyDouble())).thenReturn(Mockito.anyDouble());
+
+        RewardTransactions reward = transactionRewardService.updateCustomerRewardTransaction(rewardTrans);
+
+        Mockito.verify(transactionsRepositoryMock, times(1)).findById(id);
+        Mockito.verify(transactionsRepositoryMock, times(0)).save(rewardTrans);
+
+        Assert.assertNull(reward);
+    }
+
+    @Test
+    public void getRewardSummary_Test() {
+        Long id = Long.valueOf(5);
+        when(transactionsRepositoryMock.getRewardSummaryById(id)).thenReturn(new ArrayList<>());
+        List<CustomerRewardSummary> arraySummary = transactionRewardService.getRewardSummary(id);
+
+        Mockito.verify(transactionsRepositoryMock, times(1)).getRewardSummaryById(id);
     }
 
     private RewardTransactions createTransaction (Long id, Long custId, double transAmount, String transStatus) {
@@ -98,17 +134,4 @@ public class TransactionRewardServiceTest {
                 .transStatus(transStatus)
                 .build();
     }
-
-    private RewardTransactions createTransactionObject (Long id, Long custId, double transAmount, String transStatus) {
-
-        Customer customer = Customer.builder().id(custId).build();
-        return RewardTransactions.builder()
-                .id(id)
-                .customer(customer)
-                .transAmount(transAmount)
-                .transStatus(transStatus)
-                .rewardsEarned(153)
-                .build();
-    }
-
 }

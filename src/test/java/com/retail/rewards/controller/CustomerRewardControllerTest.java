@@ -42,9 +42,8 @@ public class CustomerRewardControllerTest {
 
     @Test
     public void createCustomer_Exception() {
-        Customer customer = null;
         IllegalArgumentException exp = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            customerRewardController.createCustomer(customer);
+            customerRewardController.createCustomer(null);
         });
         Assert.assertEquals("customer object can not be null", exp.getMessage());
     }

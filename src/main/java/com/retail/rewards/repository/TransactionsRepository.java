@@ -12,7 +12,7 @@ import java.util.List;
 public interface TransactionsRepository extends JpaRepository<RewardTransactions, Long> {
 
     @Query(value =
-            "SELECT r.cust_id as custId, MONTHNAME(r.created_date) as transMonth, sum(r.trans_amount) as rewardsSummary FROM REWARD_TRANSACTIONS r where r.cust_id = ?1 group by MONTHNAME(r.created_date)"
+            "SELECT r.cust_id as custId, MONTHNAME(r.created_date) as transMonth, sum(r.trans_amount) as rewardsSummary FROM REWARD_TRANSACTIONS r where r.cust_id = ?1 and r.created_date >= DATEADD(M, -3, now()) and r.trans_status = 'APPROVED' group by MONTHNAME(r.created_date)"
             , nativeQuery = true)
     List<CustomerRewardSummary> getRewardSummaryById(Long id);
 }

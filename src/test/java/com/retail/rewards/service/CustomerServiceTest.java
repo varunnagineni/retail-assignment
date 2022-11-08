@@ -83,6 +83,20 @@ public class CustomerServiceTest {
     }
 
     @Test
+    public void getCustomers_Success() {
+        Long id = Long.valueOf(5);
+        Customer created = createObject(id, "Nag", "Kum", "Nagkum@gmail.com");
+
+        Mockito.when(customerRepositoryMock.findAll()).thenReturn(Arrays.asList(created));
+
+        List<Customer> custs = customerService.getCustomers();
+
+        verify(customerRepositoryMock, times(1)).findAll();
+
+        Assert.assertEquals(Arrays.asList(created), custs);
+    }
+
+    @Test
     public void updateCustomerSubscription_Enroll() {
 
         String rewards = "reward, retail, customer";
@@ -112,6 +126,31 @@ public class CustomerServiceTest {
         Mockito.verify(customerRepositoryMock, times(1)).findById(id);
 
         Assert.assertEquals(created.getSubscriptions(), customer1.getSubscriptions());
+    }
+
+    @Test
+    public void updateCustomerSubscription_Null() {
+
+        Long id = Long.valueOf(5);
+
+
+        when(customerRepositoryMock.findById(id)).thenReturn(Optional.empty());
+        Customer cust = Customer.builder()
+                .id(id)
+                .lName("Nag")
+                .lName("Kum")
+                .subscriptions("transactions")
+                .action(Constants.ENROLL_TO_THE_PROGRAM)
+                .build();
+
+        Mockito.when(customerRepositoryMock.save(Mockito.any(Customer.class))).thenReturn(cust);
+
+        Customer customer1 = customerService.updateCustomerSubscription(cust);
+
+        Mockito.verify(customerRepositoryMock, times(0)).save(cust);
+        Mockito.verify(customerRepositoryMock, times(1)).findById(id);
+
+        Assert.assertNull(customer1);
     }
 
     @Test

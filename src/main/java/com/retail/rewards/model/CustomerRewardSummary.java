@@ -6,8 +6,6 @@ public interface CustomerRewardSummary {
 
     String getTransMonth();
 
-    int getMonthNum();
-
     double getRewardsSummary();
 
 }

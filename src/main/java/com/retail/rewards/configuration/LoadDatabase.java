@@ -4,15 +4,13 @@ import com.retail.rewards.model.Customer;
 import com.retail.rewards.model.RewardTransactions;
 import com.retail.rewards.repository.CustomerRepository;
 import com.retail.rewards.repository.TransactionsRepository;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 @Component
@@ -29,132 +27,188 @@ public class LoadDatabase implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        //First Customer
         Customer customer = Customer.builder()
                 .fName("Var")
                 .lName("Nag")
                 .emailId("varna@gmail.com")
                 .build();
         customerRepository.save(customer);
-        log.info("Customer : {} ", customer);
 
         RewardTransactions rewardTransactions = RewardTransactions.builder()
                 .customer(customer)
-                .rewardsEarned(100)
-                .transStatus("SUCCESS")
+                .rewardsEarned(151.02)
+                .transStatus("DECLINE")
                 .transAmount(150.51)
-                .createdDate(new Date())
+                .createdDate(getDate(0))
                 .build();
         transactionsRepository.save(rewardTransactions);
-        log.info("RewardTransaction : {} ", rewardTransactions);
 
         rewardTransactions = RewardTransactions.builder()
                 .customer(customer)
-                .rewardsEarned(102)
-                .transStatus("SUCCESS")
-                .transAmount(151.51)
-                .createdDate(new Date())
+                .rewardsEarned(25.01)
+                .transStatus("APPROVED")
+                .transAmount(75.01)
+                .createdDate(getDate(0))
                 .build();
         transactionsRepository.save(rewardTransactions);
-        log.info("RewardTransaction : {} ", rewardTransactions);
 
         rewardTransactions = RewardTransactions.builder()
                 .customer(customer)
-                .rewardsEarned(152)
-                .transStatus("SUCCESS")
-                .transAmount(176.51)
-                .createdDate(new Date())
+                .rewardsEarned(26.01)
+                .transStatus("APPROVED")
+                .transAmount(76.01)
+                .createdDate(getDate(1))
                 .build();
         transactionsRepository.save(rewardTransactions);
-        log.info("RewardTransaction : {} ", rewardTransactions);
 
         rewardTransactions = RewardTransactions.builder()
                 .customer(customer)
-                .rewardsEarned(150)
-                .transStatus("SUCCESS")
-                .transAmount(175.51)
-                .createdDate(new Date())
+                .rewardsEarned(49.99)
+                .transStatus("APPROVED")
+                .transAmount(99.99)
+                .createdDate(getDate(1))
                 .build();
         transactionsRepository.save(rewardTransactions);
-        log.info("RewardTransaction : {} ", rewardTransactions);
 
         rewardTransactions = RewardTransactions.builder()
                 .customer(customer)
-                .rewardsEarned(200)
-                .transStatus("SUCCESS")
-                .transAmount(200)
-                .createdDate(new Date())
+                .rewardsEarned(49.99)
+                .transStatus("APPROVED")
+                .transAmount(99.99)
+                .createdDate(getDate(2))
                 .build();
         transactionsRepository.save(rewardTransactions);
-        log.info("RewardTransaction : {} ", rewardTransactions);
 
         rewardTransactions = RewardTransactions.builder()
                 .customer(customer)
-                .rewardsEarned(150)
-                .transStatus("SUCCESS")
-                .transAmount(176.51)
-                .createdDate(new Date())
+                .rewardsEarned(249.98)
+                .transStatus("APPROVED")
+                .transAmount(199.99)
+                .createdDate(getDate(3))
                 .build();
         transactionsRepository.save(rewardTransactions);
-        log.info("RewardTransaction : {} ", rewardTransactions);
 
         rewardTransactions = RewardTransactions.builder()
                 .customer(customer)
-                .rewardsEarned(150)
-                .transStatus("SUCCESS")
-                .transAmount(176.51)
-                .createdDate(new Date())
+                .rewardsEarned(49.99)
+                .transStatus("APPROVED")
+                .transAmount(99.99)
+                .createdDate(getDate(3))
                 .build();
         transactionsRepository.save(rewardTransactions);
-        log.info("RewardTransaction : {} ", rewardTransactions);
 
         rewardTransactions = RewardTransactions.builder()
                 .customer(customer)
-                .rewardsEarned(150)
-                .transStatus("SUCCESS")
-                .transAmount(176.51)
-                .createdDate(new Date())
+                .rewardsEarned(0.99)
+                .transStatus("APPROVED")
+                .transAmount(50.99)
+                .createdDate(getDate(3))
                 .build();
         transactionsRepository.save(rewardTransactions);
-        log.info("RewardTransaction : {} ", rewardTransactions);
 
+        rewardTransactions = RewardTransactions.builder()
+                .customer(customer)
+                .rewardsEarned(0.99)
+                .transStatus("APPROVED")
+                .transAmount(50.99)
+                .createdDate(getDate(4))
+                .build();
+        transactionsRepository.save(rewardTransactions);
+
+        //Second Customer
         customer = Customer.builder()
-                .fName("Va")
-                .lName("Na")
-                .emailId("varnag@gmail.com")
+                .fName("Kum")
+                .lName("Nag")
+                .emailId("Kumnag@gmail.com")
                 .build();
         customerRepository.save(customer);
-        log.info("Customer : {} ", customer);
 
         rewardTransactions = RewardTransactions.builder()
                 .customer(customer)
-                .rewardsEarned(100)
-                .transStatus("SUCCESS")
-                .transAmount(176.51)
-                .createdDate(new Date())
+                .rewardsEarned(0.0)
+                .transStatus("APPROVED")
+                .transAmount(49.01)
+                .createdDate(getDate(0))
                 .build();
         transactionsRepository.save(rewardTransactions);
-        log.info("RewardTransaction : {} ", rewardTransactions);
 
         rewardTransactions = RewardTransactions.builder()
                 .customer(customer)
-                .rewardsEarned(125)
-                .transStatus("SUCCESS")
-                .transAmount(176.51)
-                .createdDate(new Date())
+                .rewardsEarned(16.99)
+                .transStatus("APPROVED")
+                .transAmount(66.99)
+                .createdDate(getDate(0))
                 .build();
         transactionsRepository.save(rewardTransactions);
-        log.info("RewardTransaction : {} ", rewardTransactions);
+
+        rewardTransactions = RewardTransactions.builder()
+                .customer(customer)
+                .rewardsEarned(36.01)
+                .transStatus("APPROVED")
+                .transAmount(86.01)
+                .createdDate(getDate(1))
+                .build();
+        transactionsRepository.save(rewardTransactions);
+
+        rewardTransactions = RewardTransactions.builder()
+                .customer(customer)
+                .rewardsEarned(39.99)
+                .transStatus("APPROVED")
+                .transAmount(89.99)
+                .createdDate(getDate(1))
+                .build();
+        transactionsRepository.save(rewardTransactions);
+
+        rewardTransactions = RewardTransactions.builder()
+                .customer(customer)
+                .rewardsEarned(9.99)
+                .transStatus("APPROVED")
+                .transAmount(59.99)
+                .createdDate(getDate(2))
+                .build();
+        transactionsRepository.save(rewardTransactions);
+
+        rewardTransactions = RewardTransactions.builder()
+                .customer(customer)
+                .rewardsEarned(249.98)
+                .transStatus("APPROVED")
+                .transAmount(199.99)
+                .createdDate(getDate(3))
+                .build();
+        transactionsRepository.save(rewardTransactions);
+
+        rewardTransactions = RewardTransactions.builder()
+                .customer(customer)
+                .rewardsEarned(27.99)
+                .transStatus("APPROVED")
+                .transAmount(77.99)
+                .createdDate(getDate(3))
+                .build();
+        transactionsRepository.save(rewardTransactions);
+
+        rewardTransactions = RewardTransactions.builder()
+                .customer(customer)
+                .rewardsEarned(1.99)
+                .transStatus("APPROVED")
+                .transAmount(51.99)
+                .createdDate(getDate(3))
+                .build();
+        transactionsRepository.save(rewardTransactions);
+
+        rewardTransactions = RewardTransactions.builder()
+                .customer(customer)
+                .rewardsEarned(0.99)
+                .transStatus("APPROVED")
+                .transAmount(50.99)
+                .createdDate(getDate(4))
+                .build();
+        transactionsRepository.save(rewardTransactions);
     }
 
-    private Date getDate(int subractMonth) throws ParseException {
+    private Date getDate(int subractMonth) {
 
-        Calendar now = Calendar.getInstance();
-
-        now.add(Calendar.MONTH, -subractMonth);
-
-        Date utilDate = now.getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateFormat.parse(String.valueOf(utilDate));
+        return DateUtils.addMonths(new Date(), -subractMonth);
 
     }
 }
