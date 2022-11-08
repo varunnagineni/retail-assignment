@@ -35,8 +35,8 @@
     b) Maven 3.6.3
     c) Used H2 inmemory database
 
-### To Get the project from Git:
-    git clone 
+### To Get the project from Git: (master branch)
+    git clone https://github.com/varunnagineni/retail-assignment.git
 
 ### Steps to run the application locally:
 
