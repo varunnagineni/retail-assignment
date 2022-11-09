@@ -36,7 +36,9 @@ public class TransactionRewardServiceTest {
     public void setUp(){
         serviceUtilMock = Mockito.mock(ServiceUtil.class);
         transactionsRepositoryMock = Mockito.mock(TransactionsRepository.class);
-        transactionRewardService = new TransactionRewardService(transactionsRepositoryMock, serviceUtilMock);
+        transactionRewardService = new TransactionRewardService();
+        transactionRewardService.transactionsRepository = transactionsRepositoryMock;
+        transactionRewardService.serviceUtil = serviceUtilMock;
     }
 
     @Test

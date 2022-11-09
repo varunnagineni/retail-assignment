@@ -62,9 +62,4 @@ public class TransactionRewardService {
 
         return transactionsRepository.getRewardSummaryById(custId);
     }
-
-    public TransactionRewardService(TransactionsRepository transactionsRepository, ServiceUtil serviceUtil) {
-        this.transactionsRepository = transactionsRepository;
-        this.serviceUtil = serviceUtil;
-    }
 }

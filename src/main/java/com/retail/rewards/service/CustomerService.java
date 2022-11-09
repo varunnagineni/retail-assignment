@@ -101,9 +101,4 @@ public class CustomerService {
                 .collect(Collectors.joining(",")));
         return customerRepository.save(cust);
     }
-
-    public CustomerService(CustomerRepository customerRepository, ServiceUtil serviceUtil) {
-        this.customerRepository = customerRepository;
-        this.serviceUtil = serviceUtil;
-    }
 }

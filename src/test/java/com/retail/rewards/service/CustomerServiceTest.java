@@ -30,7 +30,9 @@ public class CustomerServiceTest {
     public void setUp() {
         serviceUtilMock = Mockito.mock(ServiceUtil.class);
         customerRepositoryMock = Mockito.mock(CustomerRepository.class);
-        customerService = new CustomerService(customerRepositoryMock, serviceUtilMock);
+        customerService = new CustomerService();
+        customerService.customerRepository = customerRepositoryMock;
+        customerService.serviceUtil = serviceUtilMock;
     }
 
     @Test
