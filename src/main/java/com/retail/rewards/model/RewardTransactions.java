@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -23,13 +24,13 @@ public class RewardTransactions implements Serializable {
     private Customer customer;
 
     @Column(name = "trans_amount")
-    private double transAmount = 0.0;
+    private BigDecimal transAmount;
 
     @Column(name = "trans_status")
     private String transStatus;
 
     @Column(name = "rewards_earned")
-    private double rewardsEarned;
+    private BigDecimal rewardsEarned;
 
     @Column(name = "created_date")
     private Date createdDate;

@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,14 +45,15 @@ public class TransactionRewardServiceTest {
     @Test
     public void createTransaction_Success() {
 
-        RewardTransactions rewardTransaction = createTransaction(null, Long.valueOf(5), 151.5
+        RewardTransactions rewardTransaction = createTransaction(null, Long.valueOf(5), BigDecimal.valueOf(151.5)
                 , Constants.TRANSACTION_APPROVED);
         RewardTransactions rewardTransactionObject = createTransaction(Long.valueOf(1), Long.valueOf(5)
-                , 151.5, Constants.TRANSACTION_APPROVED);
+                , BigDecimal.valueOf(151.5), Constants.TRANSACTION_APPROVED);
 
         Mockito.when(transactionsRepositoryMock.save(Mockito.any(RewardTransactions.class))).thenReturn(rewardTransactionObject);
 
-        Mockito.when(serviceUtilMock.getTransactionRewardPoints(Mockito.anyDouble())).thenReturn(Mockito.anyDouble());
+        Mockito.when(serviceUtilMock.getTransactionRewardPoints(BigDecimal.valueOf(Mockito.anyDouble())))
+                .thenReturn(BigDecimal.valueOf(Mockito.anyDouble()));
 
         RewardTransactions reward = transactionRewardService.createTransaction(rewardTransaction);
 
@@ -59,7 +61,7 @@ public class TransactionRewardServiceTest {
         Mockito.verify(transactionsRepositoryMock, times(1)).save(rewardTransactionsArgumentCaptor.capture());
 
         Assert.assertEquals(rewardTransactionObject, reward);
-        Assert.assertEquals(rewardTransactionObject.getRewardsEarned(), reward.getRewardsEarned(), 0);
+        Assert.assertEquals(0, reward.getRewardsEarned().compareTo(rewardTransactionObject.getRewardsEarned()), 0);
     }
 
     @Test
@@ -67,10 +69,10 @@ public class TransactionRewardServiceTest {
 
         Long id = Long.valueOf(1);
 
-        RewardTransactions rewardTransaction = createTransaction(null, Long.valueOf(5), 151.5
+        RewardTransactions rewardTransaction = createTransaction(null, Long.valueOf(5), BigDecimal.valueOf(151.5)
                 , Constants.TRANSACTION_APPROVED);
         RewardTransactions rewardTransactionObject = createTransaction(id, Long.valueOf(5)
-                , 151.5, Constants.TRANSACTION_DECLINE);
+                , BigDecimal.valueOf(151.5), Constants.TRANSACTION_DECLINE);
 
         when(transactionsRepositoryMock.findById(id)).thenReturn(Optional.ofNullable(rewardTransaction));
 
@@ -78,11 +80,12 @@ public class TransactionRewardServiceTest {
         RewardTransactions rewardTrans = RewardTransactions.builder()
                 .id(id)
                 .customer(customer)
-                .transAmount(151.5)
+                .transAmount(BigDecimal.valueOf(151.5))
                 .transStatus(Constants.TRANSACTION_DECLINE)
                 .build();
         Mockito.when(transactionsRepositoryMock.save(Mockito.any(RewardTransactions.class))).thenReturn(rewardTransactionObject);
-        Mockito.when(serviceUtilMock.getTransactionRewardPoints(Mockito.anyDouble())).thenReturn(Mockito.anyDouble());
+        Mockito.when(serviceUtilMock.getTransactionRewardPoints(BigDecimal.valueOf(Mockito.anyDouble())))
+                .thenReturn(BigDecimal.valueOf(Mockito.anyDouble()));
 
         RewardTransactions reward = transactionRewardService.updateCustomerRewardTransaction(rewardTrans);
 
@@ -104,10 +107,11 @@ public class TransactionRewardServiceTest {
         RewardTransactions rewardTrans = RewardTransactions.builder()
                 .id(id)
                 .customer(customer)
-                .transAmount(151.5)
+                .transAmount(BigDecimal.valueOf(151.5))
                 .transStatus(Constants.TRANSACTION_DECLINE)
                 .build();
-        Mockito.when(serviceUtilMock.getTransactionRewardPoints(Mockito.anyDouble())).thenReturn(Mockito.anyDouble());
+        Mockito.when(serviceUtilMock.getTransactionRewardPoints(BigDecimal.valueOf(Mockito.anyDouble())))
+                .thenReturn(BigDecimal.valueOf(Mockito.anyDouble()));
 
         RewardTransactions reward = transactionRewardService.updateCustomerRewardTransaction(rewardTrans);
 
@@ -126,7 +130,7 @@ public class TransactionRewardServiceTest {
         Mockito.verify(transactionsRepositoryMock, times(1)).getRewardSummaryById(id);
     }
 
-    private RewardTransactions createTransaction (Long id, Long custId, double transAmount, String transStatus) {
+    private RewardTransactions createTransaction (Long id, Long custId, BigDecimal transAmount, String transStatus) {
 
         Customer customer = Customer.builder().id(custId).build();
         return RewardTransactions.builder()

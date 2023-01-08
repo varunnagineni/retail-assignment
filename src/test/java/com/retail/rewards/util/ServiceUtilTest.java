@@ -1,6 +1,5 @@
 package com.retail.rewards.util;
 
-import com.retail.rewards.util.ServiceUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ServiceUtilTest {
@@ -27,27 +27,27 @@ public class ServiceUtilTest {
     @Test
     public void isEmailAddressValid_Success () {
         boolean isValid = serviceUtil.isEmailAddressValid("varunnagineni@gmail.com");
-        Assert.assertEquals(true, isValid);
+        Assert.assertTrue(isValid);
     }
 
     @Test
     public void isEmailAddressValid_Failure () {
         boolean isValid = serviceUtil.isEmailAddressValid("varunnagineni@gmail");
-        Assert.assertEquals(false, isValid);
+        Assert.assertFalse(isValid);
     }
 
     @Test
     public void getTransactionRewardPointsWhenAbove100_Success () {
 
-        double rewards = serviceUtil.getTransactionRewardPoints(125.5);
-        Assert.assertEquals(101.0, rewards, 0);
+        BigDecimal rewards = serviceUtil.getTransactionRewardPoints(BigDecimal.valueOf(125.5));
+        Assert.assertEquals(0, rewards.compareTo(BigDecimal.valueOf(101.0)), 0);
     }
 
     @Test
     public void getTransactionRewardPointsWhenAbove50_Success () {
 
-        double rewards = serviceUtil.getTransactionRewardPoints(75.25);
-        Assert.assertEquals( 25.25, rewards, 0);
+        BigDecimal rewards = serviceUtil.getTransactionRewardPoints(BigDecimal.valueOf(75.25));
+        Assert.assertEquals( 0, rewards.compareTo(BigDecimal.valueOf(25.25)), 0);
     }
 
     @Test

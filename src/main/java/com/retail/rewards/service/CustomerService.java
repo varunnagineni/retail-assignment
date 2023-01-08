@@ -4,9 +4,8 @@ import com.retail.rewards.model.Customer;
 import com.retail.rewards.repository.CustomerRepository;
 import com.retail.rewards.util.Constants;
 import com.retail.rewards.util.ServiceUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CustomerService {
-
-    private static final Logger log = LogManager.getLogger(CustomerService.class);
-
     @Autowired
     CustomerRepository customerRepository;
 
@@ -98,7 +95,7 @@ public class CustomerService {
 
         assert subscriptionList != null;
         cust.setSubscriptions(subscriptionList.stream().map(String::toLowerCase)
-                .collect(Collectors.joining(",")));
+                .collect(Collectors.joining(Constants.DELIMITER)));
         return customerRepository.save(cust);
     }
 }
