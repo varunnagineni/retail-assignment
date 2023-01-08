@@ -4,8 +4,7 @@ import com.retail.rewards.model.CustomerRewardSummary;
 import com.retail.rewards.model.RewardTransactions;
 import com.retail.rewards.repository.TransactionsRepository;
 import com.retail.rewards.util.ServiceUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +12,8 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class TransactionRewardService {
-
-    private static final Logger log = LogManager.getLogger(TransactionRewardService.class);
 
     @Autowired
     TransactionsRepository transactionsRepository;
