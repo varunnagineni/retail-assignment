@@ -1,7 +1,7 @@
 package com.retail.rewards.controller;
 
 import com.retail.rewards.model.CustomerRewardSummary;
-import com.retail.rewards.model.RewardTransactions;
+import com.retail.rewards.model.RewardTransaction;
 import com.retail.rewards.service.TransactionRewardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ public class TransactionRewardsController {
     TransactionRewardService transactionRewardService;
 
     @PostMapping("/transaction")
-    public RewardTransactions createRewardTransaction(@RequestBody RewardTransactions rewardTransaction) {
+    public RewardTransaction createRewardTransaction(@RequestBody RewardTransaction rewardTransaction) {
         if (rewardTransaction == null) {
             throw new IllegalArgumentException("Transaction can't be null");
         }
@@ -24,7 +24,7 @@ public class TransactionRewardsController {
     }
 
     @PutMapping("/transaction")
-    public RewardTransactions updateRewardTransaction(@RequestBody RewardTransactions rewardTransaction) {
+    public RewardTransaction updateRewardTransaction(@RequestBody RewardTransaction rewardTransaction) {
         if (rewardTransaction == null) {
             throw new IllegalArgumentException("Transaction can't be null");
         }

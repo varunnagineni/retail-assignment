@@ -2,7 +2,7 @@ package com.retail.rewards;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.retail.rewards.model.Customer;
-import com.retail.rewards.model.RewardTransactions;
+import com.retail.rewards.model.RewardTransaction;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -122,21 +122,21 @@ public class RetailAssignmentApplicationTests {
                 .emailId("varnag@gmail.com")
                 .build();
 
-        RewardTransactions rewardTransactions = RewardTransactions.builder()
+        RewardTransaction rewardTransaction = RewardTransaction.builder()
                 .customer(customer)
                 .transStatus("APPROVED")
                 .transAmount(BigDecimal.valueOf(150.51))
                 .createdDate(getDate(0))
                 .build();
 
-        String postValue = OBJECT_MAPPER.writeValueAsString(rewardTransactions);
+        String postValue = OBJECT_MAPPER.writeValueAsString(rewardTransaction);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
                         .post(uri)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(postValue))
                 .andReturn();
         int status = mvcResult.getResponse().getStatus();
-        RewardTransactions result = OBJECT_MAPPER.readValue(mvcResult.getResponse().getContentAsString(), RewardTransactions.class);
+        RewardTransaction result = OBJECT_MAPPER.readValue(mvcResult.getResponse().getContentAsString(), RewardTransaction.class);
         transId = Math.toIntExact(result.getId());
         assertEquals(200, status);
         assertEquals(BigDecimal.valueOf(151.02), result.getRewardsEarned());
@@ -152,7 +152,7 @@ public class RetailAssignmentApplicationTests {
                 .emailId("varnag@gmail.com")
                 .build();
 
-        RewardTransactions rewardTransactions = RewardTransactions.builder()
+        RewardTransaction rewardTransaction = RewardTransaction.builder()
                 .id((long) transId)
                 .customer(customer)
                 .transStatus("DECLINE")
@@ -160,16 +160,16 @@ public class RetailAssignmentApplicationTests {
                 .createdDate(getDate(0))
                 .build();
 
-        String postValue = OBJECT_MAPPER.writeValueAsString(rewardTransactions);
+        String postValue = OBJECT_MAPPER.writeValueAsString(rewardTransaction);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
                         .put(uri)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(postValue))
                 .andReturn();
         int status = mvcResult.getResponse().getStatus();
-        RewardTransactions result = OBJECT_MAPPER.readValue(mvcResult.getResponse().getContentAsString(), RewardTransactions.class);
+        RewardTransaction result = OBJECT_MAPPER.readValue(mvcResult.getResponse().getContentAsString(), RewardTransaction.class);
         assertEquals(200, status);
-        assertEquals(rewardTransactions.getTransStatus(), result.getTransStatus());
+        assertEquals(rewardTransaction.getTransStatus(), result.getTransStatus());
     }
 
     private Date getDate(int subractMonth) {

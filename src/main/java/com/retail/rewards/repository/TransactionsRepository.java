@@ -1,7 +1,7 @@
 package com.retail.rewards.repository;
 
 import com.retail.rewards.model.CustomerRewardSummary;
-import com.retail.rewards.model.RewardTransactions;
+import com.retail.rewards.model.RewardTransaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TransactionsRepository extends JpaRepository<RewardTransactions, Long> {
+public interface TransactionsRepository extends JpaRepository<RewardTransaction, Long> {
 
     /**
      * Get all the transactions for a particular customer Id for the last 3 months and also transaction status must be approved.

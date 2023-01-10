@@ -2,7 +2,7 @@ package com.retail.rewards.service;
 
 import com.retail.rewards.model.Customer;
 import com.retail.rewards.model.CustomerRewardSummary;
-import com.retail.rewards.model.RewardTransactions;
+import com.retail.rewards.model.RewardTransaction;
 import com.retail.rewards.repository.TransactionsRepository;
 import com.retail.rewards.util.Constants;
 import com.retail.rewards.util.ServiceUtil;
@@ -44,19 +44,19 @@ public class TransactionRewardServiceTest {
     @Test
     public void createTransaction_Success() {
 
-        RewardTransactions rewardTransaction = createTransaction(null, Long.valueOf(5), BigDecimal.valueOf(151.5)
+        RewardTransaction rewardTransaction = createTransaction(null, Long.valueOf(5), BigDecimal.valueOf(151.5)
                 , Constants.TRANSACTION_APPROVED);
-        RewardTransactions rewardTransactionObject = createTransaction(Long.valueOf(1), Long.valueOf(5)
+        RewardTransaction rewardTransactionObject = createTransaction(Long.valueOf(1), Long.valueOf(5)
                 , BigDecimal.valueOf(151.5), Constants.TRANSACTION_APPROVED);
 
-        when(transactionsRepositoryMock.save(any(RewardTransactions.class))).thenReturn(rewardTransactionObject);
+        when(transactionsRepositoryMock.save(any(RewardTransaction.class))).thenReturn(rewardTransactionObject);
 
         when(serviceUtilMock.getTransactionRewardPoints(BigDecimal.valueOf(anyDouble())))
                 .thenReturn(BigDecimal.valueOf(anyDouble()));
 
-        RewardTransactions reward = transactionRewardService.createTransaction(rewardTransaction);
+        RewardTransaction reward = transactionRewardService.createTransaction(rewardTransaction);
 
-        ArgumentCaptor<RewardTransactions> rewardTransactionsArgumentCaptor = ArgumentCaptor.forClass(RewardTransactions.class);
+        ArgumentCaptor<RewardTransaction> rewardTransactionsArgumentCaptor = ArgumentCaptor.forClass(RewardTransaction.class);
         verify(transactionsRepositoryMock, times(1)).save(rewardTransactionsArgumentCaptor.capture());
 
         assertEquals(rewardTransactionObject, reward);
@@ -67,27 +67,27 @@ public class TransactionRewardServiceTest {
 
         Long id = Long.valueOf(1);
 
-        RewardTransactions rewardTransaction = createTransaction(null, Long.valueOf(5), BigDecimal.valueOf(151.5)
+        RewardTransaction rewardTransaction = createTransaction(null, Long.valueOf(5), BigDecimal.valueOf(151.5)
                 , Constants.TRANSACTION_APPROVED);
-        RewardTransactions rewardTransactionObject = createTransaction(id, Long.valueOf(5)
+        RewardTransaction rewardTransactionObject = createTransaction(id, Long.valueOf(5)
                 , BigDecimal.valueOf(151.5), Constants.TRANSACTION_DECLINE);
 
         when(transactionsRepositoryMock.findById(id)).thenReturn(Optional.ofNullable(rewardTransaction));
 
         Customer customer = Customer.builder().id(Long.valueOf(5)).build();
-        RewardTransactions rewardTrans = RewardTransactions.builder()
+        RewardTransaction rewardTrans = RewardTransaction.builder()
                 .id(id)
                 .customer(customer)
                 .transAmount(BigDecimal.valueOf(151.5))
                 .transStatus(Constants.TRANSACTION_DECLINE)
                 .build();
-        when(transactionsRepositoryMock.save(any(RewardTransactions.class))).thenReturn(rewardTransactionObject);
+        when(transactionsRepositoryMock.save(any(RewardTransaction.class))).thenReturn(rewardTransactionObject);
         when(serviceUtilMock.getTransactionRewardPoints(BigDecimal.valueOf(anyDouble())))
                 .thenReturn(BigDecimal.valueOf(anyDouble()));
 
-        RewardTransactions reward = transactionRewardService.updateCustomerRewardTransaction(rewardTrans);
+        RewardTransaction reward = transactionRewardService.updateCustomerRewardTransaction(rewardTrans);
 
-        ArgumentCaptor<RewardTransactions> rewardTransactionsArgumentCaptor = ArgumentCaptor.forClass(RewardTransactions.class);
+        ArgumentCaptor<RewardTransaction> rewardTransactionsArgumentCaptor = ArgumentCaptor.forClass(RewardTransaction.class);
         verify(transactionsRepositoryMock, times(1)).save(rewardTransactionsArgumentCaptor.capture());
 
         assertEquals(rewardTransactionObject, reward);
@@ -102,7 +102,7 @@ public class TransactionRewardServiceTest {
         when(transactionsRepositoryMock.findById(id)).thenReturn(Optional.empty());
 
         Customer customer = Customer.builder().id(Long.valueOf(5)).build();
-        RewardTransactions rewardTrans = RewardTransactions.builder()
+        RewardTransaction rewardTrans = RewardTransaction.builder()
                 .id(id)
                 .customer(customer)
                 .transAmount(BigDecimal.valueOf(151.5))
@@ -111,7 +111,7 @@ public class TransactionRewardServiceTest {
         when(serviceUtilMock.getTransactionRewardPoints(BigDecimal.valueOf(anyDouble())))
                 .thenReturn(BigDecimal.valueOf(anyDouble()));
 
-        RewardTransactions reward = transactionRewardService.updateCustomerRewardTransaction(rewardTrans);
+        RewardTransaction reward = transactionRewardService.updateCustomerRewardTransaction(rewardTrans);
 
         verify(transactionsRepositoryMock, times(1)).findById(id);
         verify(transactionsRepositoryMock, times(0)).save(rewardTrans);
@@ -128,10 +128,10 @@ public class TransactionRewardServiceTest {
         verify(transactionsRepositoryMock, times(1)).getRewardSummaryById(id);
     }
 
-    private RewardTransactions createTransaction (Long id, Long custId, BigDecimal transAmount, String transStatus) {
+    private RewardTransaction createTransaction (Long id, Long custId, BigDecimal transAmount, String transStatus) {
 
         Customer customer = Customer.builder().id(custId).build();
-        return RewardTransactions.builder()
+        return RewardTransaction.builder()
                 .id(id)
                 .customer(customer)
                 .transAmount(transAmount)

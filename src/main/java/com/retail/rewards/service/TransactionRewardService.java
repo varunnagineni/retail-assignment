@@ -1,7 +1,7 @@
 package com.retail.rewards.service;
 
 import com.retail.rewards.model.CustomerRewardSummary;
-import com.retail.rewards.model.RewardTransactions;
+import com.retail.rewards.model.RewardTransaction;
 import com.retail.rewards.repository.TransactionsRepository;
 import com.retail.rewards.util.ServiceUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -23,31 +23,31 @@ public class TransactionRewardService {
 
     /**
      * This method accepts only single transaction
-     * @param rewardTransactions - Single transaction object will be passed
+     * @param rewardTransaction - Single transaction object will be passed
      * @return - Newly created transaction record will be returned
      */
-    public RewardTransactions createTransaction(RewardTransactions rewardTransactions) {
+    public RewardTransaction createTransaction(RewardTransaction rewardTransaction) {
 
-        rewardTransactions.setCreatedDate(new Date());
-        rewardTransactions.setRewardsEarned(serviceUtil.getTransactionRewardPoints(rewardTransactions.getTransAmount()));
-        return transactionsRepository.save(rewardTransactions);
+        rewardTransaction.setCreatedDate(new Date());
+        rewardTransaction.setRewardsEarned(serviceUtil.getTransactionRewardPoints(rewardTransaction.getTransAmount()));
+        return transactionsRepository.save(rewardTransaction);
     }
 
     /**
      * This method updates transaction status only in any transaction record.
      * Accepted values are APPROVED or DECLINE
-     * @param rewardTransactions - Transaction that needs to be updated
+     * @param rewardTransaction - Transaction that needs to be updated
      * @return - Updated transaction record will be returned
      */
-    public RewardTransactions updateCustomerRewardTransaction(RewardTransactions rewardTransactions) {
+    public RewardTransaction updateCustomerRewardTransaction(RewardTransaction rewardTransaction) {
 
-        RewardTransactions rewardTrans = transactionsRepository
-                .findById(rewardTransactions.getId()).orElse(null);
+        RewardTransaction rewardTrans = transactionsRepository
+                .findById(rewardTransaction.getId()).orElse(null);
         if(rewardTrans == null) {
             return null;
         }
 
-        rewardTrans.setTransStatus(rewardTransactions.getTransStatus());
+        rewardTrans.setTransStatus(rewardTransaction.getTransStatus());
         return transactionsRepository.save(rewardTrans);
     }
 
