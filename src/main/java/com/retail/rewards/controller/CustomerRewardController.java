@@ -40,7 +40,7 @@ public class CustomerRewardController {
         return customerService.getCustomers();
     }
 
-    @PutMapping("/updateCustomer")
+    @PutMapping("/customer")
     public Customer updateCustomerSubscription(@RequestBody Customer customer) {
         if (customer == null) {
             throw new IllegalArgumentException("customer object can not be null");

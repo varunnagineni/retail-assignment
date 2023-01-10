@@ -4,18 +4,18 @@ import com.retail.rewards.model.Customer;
 import com.retail.rewards.repository.CustomerRepository;
 import com.retail.rewards.util.Constants;
 import com.retail.rewards.util.ServiceUtil;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
 public class CustomerServiceTest {
@@ -31,8 +31,8 @@ public class CustomerServiceTest {
 
     @Before
     public void setUp() {
-        serviceUtilMock = Mockito.mock(ServiceUtil.class);
-        customerRepositoryMock = Mockito.mock(CustomerRepository.class);
+        serviceUtilMock = mock(ServiceUtil.class);
+        customerRepositoryMock = mock(CustomerRepository.class);
         customerService = new CustomerService();
         customerService.customerRepository = customerRepositoryMock;
         customerService.serviceUtil = serviceUtilMock;
@@ -44,16 +44,16 @@ public class CustomerServiceTest {
         Customer customer = createDTO(null, "Nag", "Kum", "Nagkum@gmail.com");
         Customer created = createObject(Long.valueOf(5), "Nag", "Kum", "Nagkum@gmail.com");
 
-        Mockito.when(customerRepositoryMock.save(Mockito.any(Customer.class))).thenReturn(created);
+        when(customerRepositoryMock.save(any(Customer.class))).thenReturn(created);
 
-        Mockito.when(serviceUtilMock.isEmailAddressValid(Mockito.any(String.class))).thenReturn(true);
+        when(serviceUtilMock.isEmailAddressValid(any(String.class))).thenReturn(true);
 
         Customer cust = customerService.createCustomer(customer);
 
         ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
-        Mockito.verify(customerRepositoryMock, times(1)).save(customerArgumentCaptor.capture());
+        verify(customerRepositoryMock, times(1)).save(customerArgumentCaptor.capture());
 
-        Assert.assertEquals(created, cust);
+        assertEquals(created, cust);
     }
 
     @Test
@@ -62,16 +62,16 @@ public class CustomerServiceTest {
         Customer customer = createDTO(null, "Nag", "Kum", "Nagkum@gmail.com");
         Customer created = createObject(Long.valueOf(5), "Nag", "Kum", "Nagkum@gmail.com");
 
-        Mockito.when(customerRepositoryMock.saveAll(Mockito.anyList())).thenReturn(Arrays.asList(created));
+        when(customerRepositoryMock.saveAll(anyList())).thenReturn(Arrays.asList(created));
 
-        Mockito.when(serviceUtilMock.isEmailAddressValid(Mockito.any(String.class))).thenReturn(true);
+        when(serviceUtilMock.isEmailAddressValid(any(String.class))).thenReturn(true);
 
         List<Customer> cust = customerService.createCustomers(Arrays.asList(customer));
 
         ArgumentCaptor<List> customerArgumentCaptor = ArgumentCaptor.forClass(List.class);
-        Mockito.verify(customerRepositoryMock, times(1)).saveAll(customerArgumentCaptor.capture());
+        verify(customerRepositoryMock, times(1)).saveAll(customerArgumentCaptor.capture());
 
-        Assert.assertEquals(Arrays.asList(created).size(), cust.size());
+        assertEquals(Arrays.asList(created).size(), cust.size());
     }
 
     @Test
@@ -84,7 +84,7 @@ public class CustomerServiceTest {
 
         verify(customerRepositoryMock, times(1)).findById(id);
 
-        Assert.assertEquals(created, cust);
+        assertEquals(created, cust);
     }
 
     @Test
@@ -92,13 +92,13 @@ public class CustomerServiceTest {
         Long id = Long.valueOf(5);
         Customer created = createObject(id, "Nag", "Kum", "Nagkum@gmail.com");
 
-        Mockito.when(customerRepositoryMock.findAll()).thenReturn(Arrays.asList(created));
+        when(customerRepositoryMock.findAll()).thenReturn(Arrays.asList(created));
 
         List<Customer> custs = customerService.getCustomers();
 
         verify(customerRepositoryMock, times(1)).findAll();
 
-        Assert.assertEquals(Arrays.asList(created), custs);
+        assertEquals(Arrays.asList(created), custs);
     }
 
     @Test
@@ -122,15 +122,15 @@ public class CustomerServiceTest {
                 .action(Constants.ENROLL_TO_THE_PROGRAM)
                 .build();
 
-        Mockito.when(customerRepositoryMock.save(Mockito.any(Customer.class))).thenReturn(created);
+        when(customerRepositoryMock.save(any(Customer.class))).thenReturn(created);
 
         Customer customer1 = customerService.updateCustomerSubscription(cust);
 
         ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
-        Mockito.verify(customerRepositoryMock, times(1)).save(customerArgumentCaptor.capture());
-        Mockito.verify(customerRepositoryMock, times(1)).findById(id);
+        verify(customerRepositoryMock, times(1)).save(customerArgumentCaptor.capture());
+        verify(customerRepositoryMock, times(1)).findById(id);
 
-        Assert.assertEquals(created.getSubscriptions(), customer1.getSubscriptions());
+        assertEquals(created.getSubscriptions(), customer1.getSubscriptions());
     }
 
     @Test
@@ -148,14 +148,14 @@ public class CustomerServiceTest {
                 .action(Constants.ENROLL_TO_THE_PROGRAM)
                 .build();
 
-        Mockito.when(customerRepositoryMock.save(Mockito.any(Customer.class))).thenReturn(cust);
+        when(customerRepositoryMock.save(any(Customer.class))).thenReturn(cust);
 
         Customer customer1 = customerService.updateCustomerSubscription(cust);
 
-        Mockito.verify(customerRepositoryMock, times(0)).save(cust);
-        Mockito.verify(customerRepositoryMock, times(1)).findById(id);
+        verify(customerRepositoryMock, times(0)).save(cust);
+        verify(customerRepositoryMock, times(1)).findById(id);
 
-        Assert.assertNull(customer1);
+        assertNull(customer1);
     }
 
     @Test
@@ -179,15 +179,15 @@ public class CustomerServiceTest {
                 .action(Constants.REMOVE_TO_THE_PROGRAM)
                 .build();
 
-        Mockito.when(customerRepositoryMock.save(Mockito.any(Customer.class))).thenReturn(created);
+        when(customerRepositoryMock.save(any(Customer.class))).thenReturn(created);
 
         Customer customer1 = customerService.updateCustomerSubscription(cust);
 
         ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
-        Mockito.verify(customerRepositoryMock, times(1)).save(customerArgumentCaptor.capture());
-        Mockito.verify(customerRepositoryMock, times(1)).findById(id);
+        verify(customerRepositoryMock, times(1)).save(customerArgumentCaptor.capture());
+        verify(customerRepositoryMock, times(1)).findById(id);
 
-        Assert.assertEquals(created.getSubscriptions(), customer1.getSubscriptions());
+        assertEquals(created.getSubscriptions(), customer1.getSubscriptions());
     }
 
     private Customer createDTO(Long id, String firstName, String lastName, String emailId) {

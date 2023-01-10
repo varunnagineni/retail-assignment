@@ -23,7 +23,7 @@ public class TransactionRewardsController {
         return transactionRewardService.createTransaction(rewardTransaction);
     }
 
-    @PutMapping("/updateTransaction")
+    @PutMapping("/transaction")
     public RewardTransactions updateRewardTransaction(@RequestBody RewardTransactions rewardTransaction) {
         if (rewardTransaction == null) {
             throw new IllegalArgumentException("Transaction can't be null");
@@ -31,7 +31,7 @@ public class TransactionRewardsController {
         return transactionRewardService.updateCustomerRewardTransaction(rewardTransaction);
     }
 
-    @GetMapping("/getSummary/{id}")
+    @GetMapping("/summary/{id}")
     public List<CustomerRewardSummary> getRewardSummaryByCustId(@PathVariable Long id) {
         return transactionRewardService.getRewardSummary(id);
     }

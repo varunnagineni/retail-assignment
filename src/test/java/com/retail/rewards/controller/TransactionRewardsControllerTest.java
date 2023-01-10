@@ -5,7 +5,6 @@ import com.retail.rewards.model.CustomerRewardSummary;
 import com.retail.rewards.model.RewardTransactions;
 import com.retail.rewards.service.TransactionRewardService;
 import com.retail.rewards.util.Constants;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +15,13 @@ import org.mockito.Mockito;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 public class TransactionRewardsControllerTest {
 
@@ -28,7 +34,7 @@ public class TransactionRewardsControllerTest {
     @Before
     public void setUp() {
         transactionRewardsController = new TransactionRewardsController();
-        rewardServiceMock = Mockito.mock(TransactionRewardService.class);
+        rewardServiceMock = mock(TransactionRewardService.class);
         transactionRewardsController.transactionRewardService = rewardServiceMock;
     }
 
@@ -40,13 +46,13 @@ public class TransactionRewardsControllerTest {
         RewardTransactions createdTransaction = createTransaction( Long.valueOf(1), Long.valueOf(5), BigDecimal.valueOf(151.5)
                 , Constants.TRANSACTION_APPROVED, BigDecimal.valueOf(153));
 
-        Mockito.when(rewardServiceMock.createTransaction(rewardTransaction)).thenReturn(createdTransaction);
+        when(rewardServiceMock.createTransaction(rewardTransaction)).thenReturn(createdTransaction);
 
         RewardTransactions transactions = transactionRewardsController.createRewardTransaction(rewardTransaction);
-        Mockito.verify(rewardServiceMock, Mockito.times(1)).createTransaction(rewardTransaction);
+        verify(rewardServiceMock, Mockito.times(1)).createTransaction(rewardTransaction);
 
-        Assert.assertEquals(createdTransaction, transactions);
-        Assert.assertEquals(0, transactions.getRewardsEarned().compareTo(createdTransaction.getRewardsEarned()), 0.0);
+        assertEquals(createdTransaction, transactions);
+        assertEquals(0, transactions.getRewardsEarned().compareTo(createdTransaction.getRewardsEarned()), 0.0);
     }
 
     @Test
@@ -54,15 +60,15 @@ public class TransactionRewardsControllerTest {
         IllegalArgumentException exp = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             transactionRewardsController.createRewardTransaction(null);
         });
-        Assert.assertEquals("Transaction can't be null", exp.getMessage());
+        assertEquals("Transaction can't be null", exp.getMessage());
     }
 
     @Test
     public void updateTransaction_Exception() {
-        IllegalArgumentException exp = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException exp = assertThrows(IllegalArgumentException.class, () -> {
             transactionRewardsController.updateRewardTransaction(null);
         });
-        Assert.assertEquals("Transaction can't be null", exp.getMessage());
+        assertEquals("Transaction can't be null", exp.getMessage());
     }
 
     @Test
@@ -73,13 +79,13 @@ public class TransactionRewardsControllerTest {
         RewardTransactions requestTransaction = createTransaction( Long.valueOf(1), Long.valueOf(5), BigDecimal.valueOf(0.0)
                 , Constants.TRANSACTION_DECLINE, BigDecimal.valueOf(0.0));
 
-        Mockito.when(rewardServiceMock.updateCustomerRewardTransaction(requestTransaction)).thenReturn(updatedTransaction);
+        when(rewardServiceMock.updateCustomerRewardTransaction(requestTransaction)).thenReturn(updatedTransaction);
         RewardTransactions finalTransaction = transactionRewardsController.updateRewardTransaction(requestTransaction);
 
-        Mockito.verify(rewardServiceMock, Mockito.times(1)).updateCustomerRewardTransaction(requestTransaction);
-        Assert.assertEquals(updatedTransaction, finalTransaction);
-        Assert.assertEquals(0, finalTransaction.getRewardsEarned().compareTo(updatedTransaction.getRewardsEarned()), 0.0);
-        Assert.assertEquals(updatedTransaction.getTransStatus(), finalTransaction.getTransStatus());
+        verify(rewardServiceMock, times(1)).updateCustomerRewardTransaction(requestTransaction);
+        assertEquals(updatedTransaction, finalTransaction);
+        assertEquals(0, finalTransaction.getRewardsEarned().compareTo(updatedTransaction.getRewardsEarned()), 0.0);
+        assertEquals(updatedTransaction.getTransStatus(), finalTransaction.getTransStatus());
     }
 
     @Test
@@ -87,13 +93,13 @@ public class TransactionRewardsControllerTest {
         Long id = Long.valueOf(1);
         List<CustomerRewardSummary> customerRewardSummaryList = createCustomerRewardSummary();
 
-        Mockito.when(rewardServiceMock.getRewardSummary(id)).thenReturn(customerRewardSummaryList);
+        when(rewardServiceMock.getRewardSummary(id)).thenReturn(customerRewardSummaryList);
 
         List<CustomerRewardSummary> custSummaryList = transactionRewardsController.getRewardSummaryByCustId(id);
 
-        Mockito.verify(rewardServiceMock, Mockito.times(1)).getRewardSummary(id);
+        verify(rewardServiceMock, times(1)).getRewardSummary(id);
 
-        Assert.assertEquals(customerRewardSummaryList.size(), custSummaryList.size());
+        assertEquals(customerRewardSummaryList.size(), custSummaryList.size());
     }
 
     private RewardTransactions createTransaction (Long id, Long custId, BigDecimal transAmount

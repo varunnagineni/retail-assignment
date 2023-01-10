@@ -74,28 +74,29 @@ public class CustomerService {
         }
 
         List<String> subscriptionList = null;
-        if (customer.getAction().equalsIgnoreCase(Constants.ENROLL_TO_THE_PROGRAM)) {
-            if (StringUtils.isBlank(customer.getSubscriptions())) {
-                cust.setSubscriptions(customer.getSubscriptions().toLowerCase().trim());
-            } else {
-                subscriptionList
-                        = serviceUtil.getTokensWithCollection(cust.getSubscriptions().trim());
-                if (!subscriptionList.contains(customer.getSubscriptions().toLowerCase().trim()))
-                    subscriptionList.add(customer.getSubscriptions().toLowerCase().trim());
+        if (StringUtils.isNotBlank(customer.getAction())) {
+            if (customer.getAction().equalsIgnoreCase(Constants.ENROLL_TO_THE_PROGRAM)) {
+                if (StringUtils.isNotBlank(customer.getSubscriptions())) {
+                    subscriptionList
+                            = serviceUtil.getTokensWithCollection(cust.getSubscriptions().trim());
+                    if (!subscriptionList.contains(customer.getSubscriptions().toLowerCase().trim()))
+                        subscriptionList.add(customer.getSubscriptions().toLowerCase().trim());
+                }
+            }
+
+            if (customer.getAction().equalsIgnoreCase(Constants.REMOVE_TO_THE_PROGRAM)) {
+                if (StringUtils.isNotBlank(customer.getSubscriptions())) {
+                    subscriptionList
+                            = serviceUtil.getTokensWithCollection(cust.getSubscriptions().trim());
+                    subscriptionList.remove(customer.getSubscriptions().toLowerCase().trim());
+                }
             }
         }
 
-        if (customer.getAction().equalsIgnoreCase(Constants.REMOVE_TO_THE_PROGRAM)) {
-            if (StringUtils.isNotBlank(customer.getSubscriptions())) {
-                subscriptionList
-                        = serviceUtil.getTokensWithCollection(cust.getSubscriptions().trim());
-                subscriptionList.remove(customer.getSubscriptions().toLowerCase().trim());
-            }
+        if (subscriptionList != null) {
+            customer.setSubscriptions(subscriptionList.stream().map(String::toLowerCase)
+                    .collect(Collectors.joining(Constants.DELIMITER)));
         }
-
-        assert subscriptionList != null;
-        cust.setSubscriptions(subscriptionList.stream().map(String::toLowerCase)
-                .collect(Collectors.joining(Constants.DELIMITER)));
-        return customerRepository.save(cust);
+        return customerRepository.save(customer);
     }
 }

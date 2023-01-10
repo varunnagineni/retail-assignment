@@ -3,16 +3,22 @@ package com.retail.rewards.controller;
 import com.retail.rewards.model.Customer;
 import com.retail.rewards.service.CustomerService;
 import com.retail.rewards.util.Constants;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class CustomerRewardControllerTest {
 
@@ -25,7 +31,7 @@ public class CustomerRewardControllerTest {
     @Before
     public void setUp() {
         customerRewardController = new CustomerRewardController();
-        customerServiceMock = Mockito.mock(CustomerService.class);
+        customerServiceMock = mock(CustomerService.class);
         customerRewardController.customerService = customerServiceMock;
     }
 
@@ -34,10 +40,10 @@ public class CustomerRewardControllerTest {
         Customer customer = createDTO(null, "Nag", "Kum", "Nagkum@gmail.com");
         Customer created = createObject(Long.valueOf(5), "Nag", "Kum", "Nagkum@gmail.com");
 
-        Mockito.when(customerServiceMock.createCustomer(customer)).thenReturn(created);
+        when(customerServiceMock.createCustomer(customer)).thenReturn(created);
         Customer cust = customerRewardController.createCustomer(customer);
-        Mockito.verify(customerServiceMock, Mockito.times(1)).createCustomer(customer);
-        Assert.assertEquals(created, cust);
+        verify(customerServiceMock, times(1)).createCustomer(customer);
+        assertEquals(created, cust);
     }
 
     @Test
@@ -45,7 +51,7 @@ public class CustomerRewardControllerTest {
         IllegalArgumentException exp = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             customerRewardController.createCustomer(null);
         });
-        Assert.assertEquals("customer object can not be null", exp.getMessage());
+        assertEquals("customer object can not be null", exp.getMessage());
     }
 
     @Test
@@ -53,40 +59,40 @@ public class CustomerRewardControllerTest {
         List<Customer> customers = Arrays.asList(createDTO(null, "Nag", "Kum", "Nagkum@gmail.com"));
         List<Customer> created = Arrays.asList(createObject(Long.valueOf(5), "Nag", "Kum", "Nagkum@gmail.com"));
 
-        Mockito.when(customerServiceMock.createCustomers(customers)).thenReturn(created);
+        when(customerServiceMock.createCustomers(customers)).thenReturn(created);
         List<Customer> cust = customerRewardController.createCustomers(customers);
-        Mockito.verify(customerServiceMock, Mockito.times(1)).createCustomers(customers);
-        Assert.assertEquals(created.get(0), cust.get(0));
+        verify(customerServiceMock, times(1)).createCustomers(customers);
+        assertEquals(created.get(0), cust.get(0));
     }
 
     @Test
     public void createCustomers_Exception() {
         List<Customer> customers = null;
-        IllegalArgumentException exp = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException exp = assertThrows(IllegalArgumentException.class, () -> {
             customerRewardController.createCustomers(customers);
         });
-        Assert.assertEquals("customers objects can not be null", exp.getMessage());
+        assertEquals("customers objects can not be null", exp.getMessage());
     }
 
     @Test
     public void getCustomerById_Success() {
         Long id = Long.valueOf(5);
         Customer created = createObject(id, "Nag", "Kum", "Nagkum@gmail.com");
-        Mockito.when(customerServiceMock.getCustomerById(id)).thenReturn(created);
+        when(customerServiceMock.getCustomerById(id)).thenReturn(created);
         Customer cust = customerRewardController.getCustomerById(id);
-        Mockito.verify(customerServiceMock, Mockito.times(1)).getCustomerById(id);
-        Assert.assertNotNull(cust);
+        verify(customerServiceMock, times(1)).getCustomerById(id);
+        assertNotNull(cust);
     }
 
     @Test
     public void getAllCustomers_Success() {
         Long id = Long.valueOf(5);
         List<Customer> created = Arrays.asList(createObject(id, "Nag", "Kum", "Nagkum@gmail.com"));
-        Mockito.when(customerServiceMock.getCustomers()).thenReturn(created);
+        when(customerServiceMock.getCustomers()).thenReturn(created);
         List<Customer> cust = customerRewardController.getAllCustomers();
-        Mockito.verify(customerServiceMock, Mockito.times(1)).getCustomers();
-        Assert.assertNotNull(cust);
-        Assert.assertEquals(cust.size(), 1);
+        verify(customerServiceMock, times(1)).getCustomers();
+        assertNotNull(cust);
+        assertEquals(cust.size(), 1);
     }
 
     @Test
@@ -94,7 +100,7 @@ public class CustomerRewardControllerTest {
         IllegalArgumentException exp = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             customerRewardController.updateCustomerSubscription(null);
         });
-        Assert.assertEquals("customer object can not be null", exp.getMessage());
+        assertEquals("customer object can not be null", exp.getMessage());
     }
 
     @Test
@@ -116,10 +122,10 @@ public class CustomerRewardControllerTest {
                 .action(Constants.ENROLL_TO_THE_PROGRAM)
                 .build();
 
-        Mockito.when(customerServiceMock.updateCustomerSubscription(cust)).thenReturn(created);
+        when(customerServiceMock.updateCustomerSubscription(cust)).thenReturn(created);
         Customer customer1 = customerRewardController.updateCustomerSubscription(customer);
 
-        Mockito.verify(customerServiceMock, Mockito.times(1)).updateCustomerSubscription(customer);
+        verify(customerServiceMock, times(1)).updateCustomerSubscription(customer);
     }
 
     private Customer createDTO(Long id, String firstName, String lastName, String emailId) {
