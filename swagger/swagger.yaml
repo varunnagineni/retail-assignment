@@ -10,10 +10,12 @@ tags:
     description: Retail Customer Rewards API
   - name: transaction-rewards-controller
     description: Transaction Rewards Controller
+host: localhost:8080
+basePath: /api
 schemes:
   - http
 paths:
-  /api/customer:
+  /customer:
     put:
       tags:
         - customer-reward-controller
@@ -68,7 +70,7 @@ paths:
             $ref: "#/definitions/Customer"
         "404":
           description: Not Found
-  /api/customer/{id}:
+  /customer/{id}:
     get:
       tags:
         - customer-reward-controller
@@ -94,7 +96,7 @@ paths:
             $ref: "#/definitions/Customer"
         "404":
           description: Not Found
-  /api/customers:
+  /customers:
     post:
       tags:
         - customer-reward-controller
@@ -151,7 +153,7 @@ paths:
               $ref: "#/definitions/Customer"
         "404":
           description: Not Found
-  /api/transaction:
+  /transaction:
     put:
       tags:
         - transaction-rewards-controller
@@ -206,7 +208,7 @@ paths:
             $ref: "#/definitions/RewardTransaction"
         "404":
           description: Not Found
-  /api/summary/{id}:
+  /summary/{id}:
     get:
       tags:
         - transaction-rewards-controller
