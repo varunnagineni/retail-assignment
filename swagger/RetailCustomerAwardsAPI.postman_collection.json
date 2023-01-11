@@ -1,0 +1,174 @@
+{
+	"variables": [],
+	"info": {
+		"name": "RetailCustomerAwardsAPI",
+		"_postman_id": "632c2442-b599-5caa-af93-e1ff59536037",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CustomerApi",
+			"description": "Contains API collection related to Customers (createCustomer, createCustomers, getCustomerById, getAllCustomers, updateCustomerSubscription)",
+			"item": [
+				{
+					"name": "http://localhost:8080/api/customer",
+					"request": {
+						"url": "http://localhost:8080/api/customer",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"action\": \"\",\r\n  \"emailId\": \"test7springboot@gmail.com\",\r\n  \"fname\": \"test7\",\r\n  \"id\": 0,\r\n  \"lname\": \"Spring7\",\r\n  \"subscriptions\": \"\"\r\n}"
+						},
+						"description": "Crerate a new Customer"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/api/customers",
+					"request": {
+						"url": "http://localhost:8080/api/customers",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"action\": \"\",\r\n    \"emailId\": \"test1@gmail.com\",\r\n    \"fname\": \"Test1\",\r\n    \"id\": 0,\r\n    \"lname\": \"Service1\",\r\n    \"subscriptions\": \"\"\r\n  },\r\n  {\r\n    \"action\": \"\",\r\n    \"emailId\": \"test2@gmail.com\",\r\n    \"fname\": \"Test2\",\r\n    \"id\": 0,\r\n    \"lname\": \"Service2\",\r\n    \"subscriptions\": \"\"\r\n  }\r\n]"
+						},
+						"description": "Crerate a bulk of customers"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/api/customer/1",
+					"request": {
+						"url": "http://localhost:8080/api/customer/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"action\": \"\",\r\n  \"emailId\": \"testspringboot@gmail.com\",\r\n  \"fname\": \"test3\",\r\n  \"id\": 0,\r\n  \"lname\": \"Spring\",\r\n  \"subscriptions\": \"\"\r\n}"
+						},
+						"description": "API to get the customer by Id (custId)"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/api/customers",
+					"request": {
+						"url": "http://localhost:8080/api/customers",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"action\": \"\",\r\n  \"emailId\": \"testspringboot@gmail.com\",\r\n  \"fname\": \"test3\",\r\n  \"id\": 0,\r\n  \"lname\": \"Spring\",\r\n  \"subscriptions\": \"\"\r\n}"
+						},
+						"description": "API to get all the customers"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/api/customer",
+					"request": {
+						"url": "http://localhost:8080/api/customer",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"action\": \"ENROLL\",\r\n  \"emailId\": \"test2@gmail.com\",\r\n  \"fname\": \"Test2\",\r\n  \"id\": 5,\r\n  \"lname\": \"Service2\",\r\n  \"subscriptions\": \"REWARDS\"\r\n}"
+						},
+						"description": "Update a customers firstName, lastName, subscriptions.\n\nAction accepts: ENROLL or REMOVE"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "RewardsTransactionApi",
+			"description": "API collection that are related to rewards calculation on customer transactions (createRewardTransaction, updateRewardTransaction, getRewardSummaryByCustId)",
+			"item": [
+				{
+					"name": "http://localhost:8080/api/summary/1",
+					"request": {
+						"url": "http://localhost:8080/api/summary/1",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Get the Rewards Summary per each month for the last 3 months"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/api/transaction",
+					"request": {
+						"url": "http://localhost:8080/api/transaction",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"createdDate\": \"2023-01-11T01:42:26.623Z\",\r\n  \"customer\": {\r\n    \"action\": \"\",\r\n    \"emailId\": \"\",\r\n    \"fname\": \"\",\r\n    \"id\": 5,\r\n    \"lname\": \"\",\r\n    \"subscriptions\": \"\"\r\n  },\r\n  \"id\": 0,\r\n  \"lastModifiedDate\": \"2023-01-11T01:42:26.623Z\",\r\n  \"rewardsEarned\": 0,\r\n  \"transAmount\": 133.32,\r\n  \"transStatus\": \"APPROVED\"\r\n}"
+						},
+						"description": "Create a new transaction for a customer"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/api/transaction",
+					"request": {
+						"url": "http://localhost:8080/api/transaction",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"createdDate\": \"2023-01-11T01:42:26.623Z\",\r\n  \"customer\": {\r\n    \"action\": \"\",\r\n    \"emailId\": \"\",\r\n    \"fname\": \"\",\r\n    \"id\": 5,\r\n    \"lname\": \"\",\r\n    \"subscriptions\": \"\"\r\n  },\r\n  \"id\": 19,\r\n  \"lastModifiedDate\": \"2023-01-11T01:42:26.623Z\",\r\n  \"rewardsEarned\": 0,\r\n  \"transAmount\": 133.32,\r\n  \"transStatus\": \"DECLINE\"\r\n}"
+						},
+						"description": "Update the transaction. We can either approve or decline the given transaction"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

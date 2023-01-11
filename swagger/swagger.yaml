@@ -1,0 +1,288 @@
+swagger: "2.0"
+info:
+  description: "A retailer offers a rewards program to its customers, awarding points based on each recorded purchase. A customer receives 2 points for every dollar spent over $100 in each transaction, plus 1 point for every dollar spent over $50 in each transaction. (e.g. a $120 purchase = 2x$20 + 1x$50 = 90 points)."
+  version: 1.0.0
+  title: "Retail Customer Rewards API"
+  contact:
+    url: "https://github.com/varunnagineni/retail-assignment/tree/master"
+tags:
+  - name: customer-reward-controller
+    description: Retail Customer Rewards API
+  - name: transaction-rewards-controller
+    description: Transaction Rewards Controller
+schemes:
+  - http
+paths:
+  /api/customer:
+    put:
+      tags:
+        - customer-reward-controller
+      summary: Update the existing Customer
+      x-swagger-router-controller: CustomerRewardController
+      description: "This method just Adds or removes the customer subscription. If action is ENROLL, we will enroll the customer with the provided subscription. If action is REMOVE, we will remove the customer with the provided subscription."
+      operationId: updateCustomerSubscription
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: customer object that needs to be updated
+          required: false
+          schema:
+            $ref: "#/definitions/Customer"
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/Customer"
+        "404":
+          description: Customer not found
+    post:
+      tags:
+        - customer-reward-controller
+      summary: Create new Customer
+      x-swagger-router-controller: CustomerRewardController
+      description: "Create new Customer. Checks for valid Email Address."
+      operationId: createCustomer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: customer object that needs to be created
+          required: false
+          schema:
+            $ref: "#/definitions/Customer"
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/Customer"
+        "201":
+          description: Created
+          schema:
+            $ref: "#/definitions/Customer"
+        "404":
+          description: Not Found
+  /api/customer/{id}:
+    get:
+      tags:
+        - customer-reward-controller
+      summary: Get the existing Customer by custId
+      x-swagger-router-controller: CustomerRewardController
+      description: "Get Customer details by passing valid custId."
+      operationId: getCustomerById
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: CustId to get that customer
+          required: true
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/Customer"
+        "404":
+          description: Not Found
+  /api/customers:
+    post:
+      tags:
+        - customer-reward-controller
+      summary: Create new Customer
+      x-swagger-router-controller: CustomerRewardController
+      description: "Create customers in bulk."
+      operationId: createCustomers
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: customer objects that are needed to be created
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Customer"
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Customer"
+        "201":
+          description: Created
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Customer"
+        "404":
+          description: Not Found
+    get:
+      tags:
+        - customer-reward-controller
+      summary: Create new Customer
+      x-swagger-router-controller: CustomerRewardController
+      description: "Get all the Customer details."
+      operationId: getAllCustomers
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Customer"
+        "404":
+          description: Not Found
+  /api/transaction:
+    put:
+      tags:
+        - transaction-rewards-controller
+      summary: Update the existing Transaction
+      x-swagger-router-controller: TransactionRewardsController
+      description: "This method updates transaction status only in any transaction record. Accepted values are APPROVED or DECLINE."
+      operationId: updateRewardTransaction
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Transaction object that needs to be updated
+          required: false
+          schema:
+            $ref: "#/definitions/RewardTransaction"
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/RewardTransaction"
+        "404":
+          description: Transaction not found
+    post:
+      tags:
+        - transaction-rewards-controller
+      summary: Create new Transaction
+      x-swagger-router-controller: TransactionRewardsController
+      description: "This method accepts only single create transaction."
+      operationId: createRewardTransaction
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Transaction object that needs to be created
+          required: false
+          schema:
+            $ref: "#/definitions/RewardTransaction"
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/RewardTransaction"
+        "201":
+          description: Created
+          schema:
+            $ref: "#/definitions/RewardTransaction"
+        "404":
+          description: Not Found
+  /api/summary/{id}:
+    get:
+      tags:
+        - transaction-rewards-controller
+      summary: Get all the transactions for a customer by custId
+      x-swagger-router-controller: TransactionRewardsController
+      description: "Gets the summary for last 3 months, for only transactions that are approved."
+      operationId: getRewardSummaryByCustId
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: CustId to get all the transactions for that particular customer
+          required: true
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/RewardTransaction"
+        "404":
+          description: Not Found
+definitions:
+  Customer:
+    properties:
+      action:
+        type: string
+        description: ENROLL or REMOVE from a reward program
+      emailId:
+        type: string
+        description: Customer email ID
+      fname:
+        type: string
+        description: Customer First Name
+      id:
+        type: integer
+        format: int64
+      lname:
+        type: string
+        description: Customer Last Name
+      subscriptions:
+        type: string
+        description: List of subscriptions that the customer is enrolled
+  CustomerRewardSummary:
+    properties:
+      custId:
+        type: string
+        description: CustomerId
+      rewardsSummary:
+        type: number
+        format: double
+      transMonth:
+        type: string
+        description: Transaction Month
+  RewardTransaction:
+    properties:
+      createdDate:
+        type: string
+        format: date-time
+      customer:
+        $ref: "#/definitions/Customer"
+      lastDateModified:
+        type: string
+        format: date-time
+      rewardsEarned:
+        type: number
+        format: bigdecimal
+      transAmount:
+        type: number
+        format: bigdecimal
+      transStatus:
+        type: string
+        description: Status of the transaction. Can be Approve or Decline.
+      
