@@ -233,7 +233,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/RewardTransaction"
+              $ref: "#/definitions/CustomerRewardSummary"
         "404":
           description: Not Found
 definitions:
