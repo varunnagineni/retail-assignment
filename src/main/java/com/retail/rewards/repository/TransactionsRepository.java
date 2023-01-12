@@ -16,8 +16,11 @@ public interface TransactionsRepository extends JpaRepository<RewardTransaction,
      * @param id
      * @return
      */
-    @Query(value =
-            "SELECT r.cust_id as custId, MONTHNAME(r.created_date) as transMonth, sum(r.trans_amount) as rewardsSummary FROM REWARD_TRANSACTIONS r where r.cust_id = ?1 and r.created_date >= DATEADD(M, -3, now()) and r.trans_status = 'APPROVED' group by MONTHNAME(r.created_date)"
-            , nativeQuery = true)
+    @Query("SELECT r.customer.id as custId, MONTH(r.createdDate) as transMonth, sum(r.transAmount) as rewardsSummary " +
+            "FROM RewardTransaction r " +
+            "WHERE r.customer.id = ?1 " +
+            "AND r.transStatus = 'APPROVED' " +
+            "AND r.createdDate >= CURRENT_DATE - 90 " +
+            "GROUP BY MONTH(r.createdDate)")
     List<CustomerRewardSummary> getRewardSummaryById(Long id);
 }
