@@ -22,17 +22,6 @@ public class CustomerService {
     ServiceUtil serviceUtil;
 
     /**
-     * Checks for valid Email Address
-     * @param customer - Customer object will be passed without custId
-     * @return - Created Customer record will be returned
-     */
-    public Customer createCustomer(Customer customer) {
-        if (!serviceUtil.isEmailAddressValid(customer.getEmailId()))
-            throw new IllegalArgumentException("Email ID is not valid");
-        return customerRepository.save(customer);
-    }
-
-    /**
      * Create customers in bulk
      * @param customers - Customer objects will be passed without custId's
      * @return - returns list of customers

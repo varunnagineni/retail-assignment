@@ -39,32 +39,12 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void createCustomer_Success() {
-
-        Customer customer = createDTO(null, "Nag", "Kum", "Nagkum@gmail.com");
-        Customer created = createObject(Long.valueOf(5), "Nag", "Kum", "Nagkum@gmail.com");
-
-        when(customerRepositoryMock.save(any(Customer.class))).thenReturn(created);
-
-        when(serviceUtilMock.isEmailAddressValid(any(String.class))).thenReturn(true);
-
-        Customer cust = customerService.createCustomer(customer);
-
-        ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
-        verify(customerRepositoryMock, times(1)).save(customerArgumentCaptor.capture());
-
-        assertEquals(created, cust);
-    }
-
-    @Test
     public void createCustomers_Success() {
 
         Customer customer = createDTO(null, "Nag", "Kum", "Nagkum@gmail.com");
         Customer created = createObject(Long.valueOf(5), "Nag", "Kum", "Nagkum@gmail.com");
 
         when(customerRepositoryMock.saveAll(anyList())).thenReturn(Arrays.asList(created));
-
-        when(serviceUtilMock.isEmailAddressValid(any(String.class))).thenReturn(true);
 
         List<Customer> cust = customerService.createCustomers(Arrays.asList(customer));
 

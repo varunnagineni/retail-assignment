@@ -15,16 +15,6 @@ import java.util.stream.Collectors;
 public class ServiceUtil {
 
     /**
-     * This method checks if the emailId is valid. It compiles against the regular expression
-     * @param emailId
-     * @return
-     */
-    public boolean isEmailAddressValid(String emailId) {
-        log.debug("EmailId to be validated : " + emailId);
-        return Pattern.compile(Constants.EMAIL_REGEX).matcher(emailId).matches();
-    }
-
-    /**
      * It gets a Delimiter seperated string (Here its ',') and returns lists of strings
      * @param str
      * @return

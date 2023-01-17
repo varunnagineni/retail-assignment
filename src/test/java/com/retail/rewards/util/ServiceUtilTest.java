@@ -26,18 +26,6 @@ public class ServiceUtilTest {
     }
 
     @Test
-    public void isEmailAddressValid_Success () {
-        boolean isValid = serviceUtil.isEmailAddressValid("varunnagineni@gmail.com");
-        assertTrue(isValid);
-    }
-
-    @Test
-    public void isEmailAddressValid_Failure () {
-        boolean isValid = serviceUtil.isEmailAddressValid("varunnagineni@gmail");
-        assertFalse(isValid);
-    }
-
-    @Test
     public void getTransactionRewardPointsWhenAbove100_Success () {
 
         BigDecimal rewards = serviceUtil.getTransactionRewardPoints(BigDecimal.valueOf(125.5));

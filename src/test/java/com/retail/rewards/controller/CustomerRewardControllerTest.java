@@ -36,25 +36,6 @@ public class CustomerRewardControllerTest {
     }
 
     @Test
-    public void createCustomer_success() {
-        Customer customer = createDTO(null, "Nag", "Kum", "Nagkum@gmail.com");
-        Customer created = createObject(Long.valueOf(5), "Nag", "Kum", "Nagkum@gmail.com");
-
-        when(customerServiceMock.createCustomer(customer)).thenReturn(created);
-        Customer cust = customerRewardController.createCustomer(customer);
-        verify(customerServiceMock, times(1)).createCustomer(customer);
-        assertEquals(created, cust);
-    }
-
-    @Test
-    public void createCustomer_Exception() {
-        IllegalArgumentException exp = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            customerRewardController.createCustomer(null);
-        });
-        assertEquals("customer object can not be null", exp.getMessage());
-    }
-
-    @Test
     public void createCustomers_success() {
         List<Customer> customers = Arrays.asList(createDTO(null, "Nag", "Kum", "Nagkum@gmail.com"));
         List<Customer> created = Arrays.asList(createObject(Long.valueOf(5), "Nag", "Kum", "Nagkum@gmail.com"));

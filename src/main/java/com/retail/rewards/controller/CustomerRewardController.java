@@ -14,14 +14,6 @@ public class CustomerRewardController {
     @Autowired
     CustomerService customerService;
 
-    @PostMapping("/customer")
-    public Customer createCustomer(@RequestBody Customer customer) {
-        if (customer == null) {
-            throw new IllegalArgumentException("customer object can not be null");
-        }
-        return customerService.createCustomer(customer);
-    }
-
     @PostMapping("/customers")
     public List<Customer> createCustomers(@RequestBody List<Customer> customers) {
         if (customers == null || customers.size() < 1) {

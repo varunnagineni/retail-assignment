@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -45,23 +46,23 @@ public class RetailAssignmentApplicationTests {
     private static int transId;
 
     @Test
-    public void createCustomer() throws Exception {
-        String uri = "/api/customer";
+    public void createCustomers() throws Exception {
+        String uri = "/api/customers";
         Customer customer = Customer.builder()
                 .fName("Kam")
                 .lName("Kum")
                 .emailId("varnag@gmail.com")
                 .build();
 
-        String postValue = OBJECT_MAPPER.writeValueAsString(customer);
+        String postValue = OBJECT_MAPPER.writeValueAsString(Collections.singletonList(customer));
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
                         .post(uri)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(postValue))
                 .andReturn();
         int status = mvcResult.getResponse().getStatus();
-        Customer result = OBJECT_MAPPER.readValue(mvcResult.getResponse().getContentAsString(), Customer.class);
-        custId = Math.toIntExact(result.getId());
+        List<Customer> results = Arrays.asList(OBJECT_MAPPER.readValue(mvcResult.getResponse().getContentAsString(), Customer[].class));
+        custId = Math.toIntExact(results.get(0).getId());
         assertEquals(200, status);
     }
 
