@@ -34,10 +34,11 @@ public class RetailAssignmentApplicationTests {
     public void contextLoads() {
     }
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper OBJECT_MAPPER;
 
     private static int custId;
 
