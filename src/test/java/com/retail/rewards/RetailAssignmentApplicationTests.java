@@ -67,19 +67,6 @@ public class RetailAssignmentApplicationTests {
     }
 
     @Test
-    public void getAllCustomers() throws Exception {
-        String uri = "/api/customers";
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                        .get(uri)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
-        List<Customer> result = Arrays.asList(OBJECT_MAPPER.readValue(mvcResult.getResponse().getContentAsString(), Customer[].class));
-        assertEquals(custId, result.size());
-    }
-
-    @Test
     public void getCustomerById() throws Exception {
         String uri = "/api/customer/"+custId;
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders

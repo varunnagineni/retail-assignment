@@ -66,17 +66,6 @@ public class CustomerRewardControllerTest {
     }
 
     @Test
-    public void getAllCustomers_Success() {
-        Long id = Long.valueOf(5);
-        List<Customer> created = Arrays.asList(createObject(id, "Nag", "Kum", "Nagkum@gmail.com"));
-        when(customerServiceMock.getCustomers()).thenReturn(created);
-        List<Customer> cust = customerRewardController.getAllCustomers();
-        verify(customerServiceMock, times(1)).getCustomers();
-        assertNotNull(cust);
-        assertEquals(cust.size(), 1);
-    }
-
-    @Test
     public void updateCustomer_Exception() {
         IllegalArgumentException exp = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             customerRewardController.updateCustomerSubscription(null);

@@ -40,14 +40,6 @@ public class CustomerService {
     }
 
     /**
-     *
-     * @return - Gets all the Customers in customer table
-     */
-    public List<Customer> getCustomers() {
-        return customerRepository.findAll();
-    }
-
-    /**
      * This method just Adds or removes the customer subscription.
      * If action is ENROLL, we will enroll the customer with the provided subscription
      * If action is REMOVE, we will remove the customer with the provided subscription

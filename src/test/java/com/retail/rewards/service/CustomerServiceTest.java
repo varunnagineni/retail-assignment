@@ -10,7 +10,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,21 +42,21 @@ public class CustomerServiceTest {
     public void createCustomers_Success() {
 
         Customer customer = createDTO(null, "Nag", "Kum", "Nagkum@gmail.com");
-        Customer created = createObject(Long.valueOf(5), "Nag", "Kum", "Nagkum@gmail.com");
+        Customer created = createObject(5L, "Nag", "Kum", "Nagkum@gmail.com");
 
-        when(customerRepositoryMock.saveAll(anyList())).thenReturn(Arrays.asList(created));
+        when(customerRepositoryMock.saveAll(anyList())).thenReturn(Collections.singletonList(created));
 
-        List<Customer> cust = customerService.createCustomers(Arrays.asList(customer));
+        List<Customer> cust = customerService.createCustomers(Collections.singletonList(customer));
 
         ArgumentCaptor<List> customerArgumentCaptor = ArgumentCaptor.forClass(List.class);
         verify(customerRepositoryMock, times(1)).saveAll(customerArgumentCaptor.capture());
 
-        assertEquals(Arrays.asList(created).size(), cust.size());
+        assertEquals(Collections.singletonList(created).size(), cust.size());
     }
 
     @Test
     public void getCustomerById_Success() {
-        Long id = Long.valueOf(5);
+        Long id = 5L;
         Customer created = createObject(id, "Nag", "Kum", "Nagkum@gmail.com");
         when(customerRepositoryMock.findById(id)).thenReturn(Optional.of(created));
 
@@ -68,25 +68,11 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void getCustomers_Success() {
-        Long id = Long.valueOf(5);
-        Customer created = createObject(id, "Nag", "Kum", "Nagkum@gmail.com");
-
-        when(customerRepositoryMock.findAll()).thenReturn(Arrays.asList(created));
-
-        List<Customer> custs = customerService.getCustomers();
-
-        verify(customerRepositoryMock, times(1)).findAll();
-
-        assertEquals(Arrays.asList(created), custs);
-    }
-
-    @Test
     public void updateCustomerSubscription_Enroll() {
 
         String rewards = "reward, retail, customer";
         String updatedRewards = "reward, retail, customer, transaction";
-        Long id = Long.valueOf(5);
+        Long id = 5L;
 
         Customer customer = createDTO(id, "Nag", "Kum", "Nagkum@gmail.com");
         customer.setSubscriptions(rewards);
@@ -116,8 +102,7 @@ public class CustomerServiceTest {
     @Test
     public void updateCustomerSubscription_Null() {
 
-        Long id = Long.valueOf(5);
-
+        Long id = 5L;
 
         when(customerRepositoryMock.findById(id)).thenReturn(Optional.empty());
         Customer cust = Customer.builder()
@@ -143,7 +128,7 @@ public class CustomerServiceTest {
 
         String updatedRewards = "reward, retail, customer";
         String rewards = "reward, retail, customer, transaction";
-        Long id = Long.valueOf(5);
+        Long id = 5L;
 
         Customer customer = createDTO(id, "Nag", "Kum", "Nagkum@gmail.com");
         customer.setSubscriptions(rewards);

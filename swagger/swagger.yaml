@@ -41,35 +41,6 @@ paths:
             $ref: "#/definitions/Customer"
         "404":
           description: Customer not found
-    post:
-      tags:
-        - customer-reward-controller
-      summary: Create new Customer
-      x-swagger-router-controller: CustomerRewardController
-      description: "Create new Customer. Checks for valid Email Address."
-      operationId: createCustomer
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: customer object that needs to be created
-          required: false
-          schema:
-            $ref: "#/definitions/Customer"
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: "#/definitions/Customer"
-        "201":
-          description: Created
-          schema:
-            $ref: "#/definitions/Customer"
-        "404":
-          description: Not Found
   /customer/{id}:
     get:
       tags:
@@ -126,27 +97,6 @@ paths:
               $ref: "#/definitions/Customer"
         "201":
           description: Created
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Customer"
-        "404":
-          description: Not Found
-    get:
-      tags:
-        - customer-reward-controller
-      summary: Create new Customer
-      x-swagger-router-controller: CustomerRewardController
-      description: "Get all the Customer details."
-      operationId: getAllCustomers
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters: []
-      responses:
-        "200":
-          description: OK
           schema:
             type: array
             items:

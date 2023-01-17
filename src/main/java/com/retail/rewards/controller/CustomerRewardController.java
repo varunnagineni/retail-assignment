@@ -27,11 +27,6 @@ public class CustomerRewardController {
         return customerService.getCustomerById(id);
     }
 
-    @GetMapping("/customers")
-    public List<Customer> getAllCustomers() {
-        return customerService.getCustomers();
-    }
-
     @PutMapping("/customer")
     public Customer updateCustomerSubscription(@RequestBody Customer customer) {
         if (customer == null) {
