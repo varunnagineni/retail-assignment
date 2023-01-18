@@ -4,6 +4,8 @@ import com.retail.rewards.model.CustomerRewardSummary;
 import com.retail.rewards.model.RewardTransaction;
 import com.retail.rewards.service.TransactionRewardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,23 +18,31 @@ public class TransactionRewardsController {
     TransactionRewardService transactionRewardService;
 
     @PostMapping("/transaction")
-    public RewardTransaction createRewardTransaction(@RequestBody RewardTransaction rewardTransaction) {
-        if (rewardTransaction == null) {
-            throw new IllegalArgumentException("Transaction can't be null");
+    public ResponseEntity<RewardTransaction> createRewardTransaction(@RequestBody RewardTransaction rewardTransaction) {
+
+        RewardTransaction createdRewardTransaction = transactionRewardService.createTransaction(rewardTransaction);
+
+        if (createdRewardTransaction == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return transactionRewardService.createTransaction(rewardTransaction);
+        return new ResponseEntity<>(createdRewardTransaction, HttpStatus.CREATED);
     }
 
     @PutMapping("/transaction")
-    public RewardTransaction updateRewardTransaction(@RequestBody RewardTransaction rewardTransaction) {
-        if (rewardTransaction == null) {
-            throw new IllegalArgumentException("Transaction can't be null");
+    public ResponseEntity<RewardTransaction> updateRewardTransaction(@RequestBody RewardTransaction rewardTransaction) {
+        RewardTransaction updatedRewardTransaction = transactionRewardService.updateCustomerRewardTransaction(rewardTransaction);
+        if (updatedRewardTransaction == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return transactionRewardService.updateCustomerRewardTransaction(rewardTransaction);
+        return new ResponseEntity<>(updatedRewardTransaction, HttpStatus.OK);
     }
 
     @GetMapping("/summary/{id}")
-    public List<CustomerRewardSummary> getRewardSummaryByCustId(@PathVariable Long id) {
-        return transactionRewardService.getRewardSummary(id);
+    public ResponseEntity<List<CustomerRewardSummary>> getRewardSummaryByCustId(@PathVariable Long id) {
+
+        List<CustomerRewardSummary> customerRewardSummaryList = transactionRewardService.getRewardSummary(id);
+        if (customerRewardSummaryList == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(customerRewardSummaryList, HttpStatus.OK);
     }
 }

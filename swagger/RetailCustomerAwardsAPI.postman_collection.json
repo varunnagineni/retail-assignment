@@ -12,26 +12,6 @@
 			"description": "Contains API collection related to Customers (createCustomer, createCustomers, getCustomerById, getAllCustomers, updateCustomerSubscription)",
 			"item": [
 				{
-					"name": "http://localhost:8080/api/customer",
-					"request": {
-						"url": "http://localhost:8080/api/customer",
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"action\": \"\",\r\n  \"emailId\": \"test7springboot@gmail.com\",\r\n  \"fname\": \"test7\",\r\n  \"id\": 0,\r\n  \"lname\": \"Spring7\",\r\n  \"subscriptions\": \"\"\r\n}"
-						},
-						"description": "Crerate a new Customer"
-					},
-					"response": []
-				},
-				{
 					"name": "http://localhost:8080/api/customers",
 					"request": {
 						"url": "http://localhost:8080/api/customers",
@@ -68,26 +48,6 @@
 							"raw": "{\r\n  \"action\": \"\",\r\n  \"emailId\": \"testspringboot@gmail.com\",\r\n  \"fname\": \"test3\",\r\n  \"id\": 0,\r\n  \"lname\": \"Spring\",\r\n  \"subscriptions\": \"\"\r\n}"
 						},
 						"description": "API to get the customer by Id (custId)"
-					},
-					"response": []
-				},
-				{
-					"name": "http://localhost:8080/api/customers",
-					"request": {
-						"url": "http://localhost:8080/api/customers",
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"action\": \"\",\r\n  \"emailId\": \"testspringboot@gmail.com\",\r\n  \"fname\": \"test3\",\r\n  \"id\": 0,\r\n  \"lname\": \"Spring\",\r\n  \"subscriptions\": \"\"\r\n}"
-						},
-						"description": "API to get all the customers"
 					},
 					"response": []
 				},
@@ -142,7 +102,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"createdDate\": \"2023-01-11T01:42:26.623Z\",\r\n  \"customer\": {\r\n    \"action\": \"\",\r\n    \"emailId\": \"\",\r\n    \"fname\": \"\",\r\n    \"id\": 5,\r\n    \"lname\": \"\",\r\n    \"subscriptions\": \"\"\r\n  },\r\n  \"id\": 0,\r\n  \"lastModifiedDate\": \"2023-01-11T01:42:26.623Z\",\r\n  \"rewardsEarned\": 0,\r\n  \"transAmount\": 133.32,\r\n  \"transStatus\": \"APPROVED\"\r\n}"
+							"raw": "{\r\n  \"createdDate\": \"2023-01-11T01:42:26.623Z\",\r\n  \"customer\": {\r\n    \"action\": \"\",\r\n    \"emailId\": \"\",\r\n    \"fname\": \"\",\r\n    \"id\": \"1\",\r\n    \"lname\": \"\",\r\n    \"subscription\": \"\"\r\n  },\r\n  \"id\": 0,\r\n  \"lastModifiedDate\": \"2023-01-11T01:42:26.623Z\",\r\n  \"rewardsEarned\": 0,\r\n  \"transAmount\": 133.32,\r\n  \"transStatus\": \"APPROVED\"\r\n}"
 						},
 						"description": "Create a new transaction for a customer"
 					},

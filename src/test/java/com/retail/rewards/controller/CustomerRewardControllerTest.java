@@ -5,20 +5,16 @@ import com.retail.rewards.service.CustomerService;
 import com.retail.rewards.util.Constants;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class CustomerRewardControllerTest {
 
@@ -36,51 +32,54 @@ public class CustomerRewardControllerTest {
     }
 
     @Test
-    public void createCustomers_success() {
-        List<Customer> customers = Arrays.asList(createDTO(null, "Nag", "Kum", "Nagkum@gmail.com"));
-        List<Customer> created = Arrays.asList(createObject(Long.valueOf(5), "Nag", "Kum", "Nagkum@gmail.com"));
+    public void GivenValidCustomersData_WhenCreateCustomersIsCalled_Then201StatusCodeIsReturned() {
+        List<Customer> customers = Collections.singletonList(createDTO(null, "Nag", "Kum", "Nagkum@gmail.com"));
+        List<Customer> created = Collections.singletonList(createObject(5L, "Nag", "Kum", "Nagkum@gmail.com"));
 
         when(customerServiceMock.createCustomers(customers)).thenReturn(created);
-        List<Customer> cust = customerRewardController.createCustomers(customers);
+        ResponseEntity<List<Customer>> cust = customerRewardController.createCustomers(customers);
         verify(customerServiceMock, times(1)).createCustomers(customers);
-        assertEquals(created.get(0), cust.get(0));
+        assertEquals(HttpStatus.CREATED, cust.getStatusCode());
+        assertEquals(created, cust.getBody());
     }
 
     @Test
-    public void createCustomers_Exception() {
-        List<Customer> customers = null;
-        IllegalArgumentException exp = assertThrows(IllegalArgumentException.class, () -> {
-            customerRewardController.createCustomers(customers);
-        });
-        assertEquals("customers objects can not be null", exp.getMessage());
+    public void GivenInappropriateCustomersData_WhenCreateCustomersIsCalled_ThenBadRequestIsReturned() {
+        List<Customer> customers = Collections.singletonList(createDTO(null, "", "Kum", "Nagkum@gmail.com"));
+
+        when(customerServiceMock.createCustomers(customers)).thenReturn(null);
+
+        ResponseEntity<List<Customer>> response = customerRewardController.createCustomers(customers);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody());
     }
 
     @Test
-    public void getCustomerById_Success() {
-        Long id = Long.valueOf(5);
+    public void GivenValidCustomerId_WhenGetCustomerByIdIsCalled_Then200StatusCodeAndCustomerDetailsAreReturned() {
+        long id = 5L;
         Customer created = createObject(id, "Nag", "Kum", "Nagkum@gmail.com");
         when(customerServiceMock.getCustomerById(id)).thenReturn(created);
-        Customer cust = customerRewardController.getCustomerById(id);
+        ResponseEntity<Customer> cust = customerRewardController.getCustomerById(id);
         verify(customerServiceMock, times(1)).getCustomerById(id);
+        assertEquals(HttpStatus.OK, cust.getStatusCode());
         assertNotNull(cust);
     }
 
     @Test
-    public void updateCustomer_Exception() {
-        IllegalArgumentException exp = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            customerRewardController.updateCustomerSubscription(null);
-        });
-        assertEquals("customer object can not be null", exp.getMessage());
+    public void GivenInValidCustomerId_WhenUpdateCustomerSubscriptionIsCalled_Then404StatusCodeIsReturned() {
+        long id = 15L;
+        when(customerServiceMock.getCustomerById(id)).thenReturn(null);
+        ResponseEntity<Customer> cust = customerRewardController.getCustomerById(id);
+        verify(customerServiceMock, times(1)).getCustomerById(id);
+        assertEquals(HttpStatus.NOT_FOUND, cust.getStatusCode());
+        assertNull(cust.getBody());
     }
 
     @Test
-    public void updateCustomer_Success() {
-        String rewards = "reward, retail, customer";
+    public void GivenValidCustomerData_WhenUpdateCustomerSubscriptionIsCalled_Then200StatusCodeAndCustomerIsUpdated() {
         String updatedRewards = "reward, retail, customer, transaction";
-        Long id = Long.valueOf(5);
+        Long id = 5L;
 
-        Customer customer = createDTO(id, "Nag", "Kum", "Nagkum@gmail.com");
-        customer.setSubscriptions(rewards);
         Customer created = createObject(id, "Nag", "Kum", "Nagkum@gmail.com");
         created.setSubscriptions(updatedRewards);
 
@@ -93,9 +92,10 @@ public class CustomerRewardControllerTest {
                 .build();
 
         when(customerServiceMock.updateCustomerSubscription(cust)).thenReturn(created);
-        Customer customer1 = customerRewardController.updateCustomerSubscription(customer);
+        ResponseEntity<Customer> updatedCustomerSummary = customerRewardController.updateCustomerSubscription(cust);
 
-        verify(customerServiceMock, times(1)).updateCustomerSubscription(customer);
+        verify(customerServiceMock, times(1)).updateCustomerSubscription(cust);
+        assertEquals(HttpStatus.OK, updatedCustomerSummary.getStatusCode());
     }
 
     private Customer createDTO(Long id, String firstName, String lastName, String emailId) {

@@ -58,6 +58,8 @@ public class TransactionRewardService {
      */
     public List<CustomerRewardSummary> getRewardSummary(Long custId) {
 
-        return transactionsRepository.getRewardSummaryById(custId);
+        List<CustomerRewardSummary> customerRewardSummaryList = transactionsRepository.getRewardSummaryById(custId);
+
+        return customerRewardSummaryList.size() == 0 ? null : customerRewardSummaryList;
     }
 }

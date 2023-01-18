@@ -42,11 +42,11 @@ public class TransactionRewardServiceTest {
     }
 
     @Test
-    public void createTransaction_Success() {
+    public void GivenValidTransactionData_WhenCreateTransactionIsCalled_ThenCreatedRewardTransactionAnd201StatusCodeIsReturned() {
 
-        RewardTransaction rewardTransaction = createTransaction(null, Long.valueOf(5), BigDecimal.valueOf(151.5)
+        RewardTransaction rewardTransaction = createTransaction(null, 5L, BigDecimal.valueOf(151.5)
                 , Constants.TRANSACTION_APPROVED);
-        RewardTransaction rewardTransactionObject = createTransaction(Long.valueOf(1), Long.valueOf(5)
+        RewardTransaction rewardTransactionObject = createTransaction(1L, 5L
                 , BigDecimal.valueOf(151.5), Constants.TRANSACTION_APPROVED);
 
         when(transactionsRepositoryMock.save(any(RewardTransaction.class))).thenReturn(rewardTransactionObject);
@@ -63,18 +63,18 @@ public class TransactionRewardServiceTest {
     }
 
     @Test
-    public void updateTransaction_Success() {
+    public void GivenValidTransactionData_WhenUpdateCustomerRewardTransactionIsCalled_ThenRewardTransactionIsUpdated() {
 
-        Long id = Long.valueOf(1);
+        Long id = 1L;
 
-        RewardTransaction rewardTransaction = createTransaction(null, Long.valueOf(5), BigDecimal.valueOf(151.5)
+        RewardTransaction rewardTransaction = createTransaction(null, 5L, BigDecimal.valueOf(151.5)
                 , Constants.TRANSACTION_APPROVED);
-        RewardTransaction rewardTransactionObject = createTransaction(id, Long.valueOf(5)
+        RewardTransaction rewardTransactionObject = createTransaction(id, 5L
                 , BigDecimal.valueOf(151.5), Constants.TRANSACTION_DECLINE);
 
         when(transactionsRepositoryMock.findById(id)).thenReturn(Optional.ofNullable(rewardTransaction));
 
-        Customer customer = Customer.builder().id(Long.valueOf(5)).build();
+        Customer customer = Customer.builder().id(5L).build();
         RewardTransaction rewardTrans = RewardTransaction.builder()
                 .id(id)
                 .customer(customer)
@@ -95,13 +95,13 @@ public class TransactionRewardServiceTest {
     }
 
     @Test
-    public void updateTransaction_Null() {
+    public void GivenUnknownCustomerData_WhenUpdateCustomerRewardTransactionIsCalled_ThenNullIsReturned() {
 
-        Long id = Long.valueOf(1);
+        Long id = 1L;
 
         when(transactionsRepositoryMock.findById(id)).thenReturn(Optional.empty());
 
-        Customer customer = Customer.builder().id(Long.valueOf(5)).build();
+        Customer customer = Customer.builder().id(5L).build();
         RewardTransaction rewardTrans = RewardTransaction.builder()
                 .id(id)
                 .customer(customer)
@@ -120,8 +120,8 @@ public class TransactionRewardServiceTest {
     }
 
     @Test
-    public void getRewardSummary_Test() {
-        Long id = Long.valueOf(5);
+    public void GivenValidCustomerId_WhenGetRewardSummaryByIdIsCalled_ThenCorrespondingCustomerRewardSummaryListAreReturned() {
+        Long id = 5L;
         when(transactionsRepositoryMock.getRewardSummaryById(id)).thenReturn(new ArrayList<>());
         List<CustomerRewardSummary> arraySummary = transactionRewardService.getRewardSummary(id);
 

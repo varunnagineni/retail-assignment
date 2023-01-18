@@ -39,7 +39,7 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void createCustomers_Success() {
+    public void GivenValidCustomersList_WhenCreateCustomersIsCalled_ThenCreatedCustomersListAreReturned() {
 
         Customer customer = createDTO(null, "Nag", "Kum", "Nagkum@gmail.com");
         Customer created = createObject(5L, "Nag", "Kum", "Nagkum@gmail.com");
@@ -55,7 +55,7 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void getCustomerById_Success() {
+    public void GivenValidCustomerId_WhenGetCustomerByIdIsCalled_ThenValidCustomerIsReturned() {
         Long id = 5L;
         Customer created = createObject(id, "Nag", "Kum", "Nagkum@gmail.com");
         when(customerRepositoryMock.findById(id)).thenReturn(Optional.of(created));
@@ -68,7 +68,7 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void updateCustomerSubscription_Enroll() {
+    public void GivenValidCustomerData_WhenUpdateCustomerSubscriptionIsCalled_ThenCustomerIsEnrolledToTheSubscription() {
 
         String rewards = "reward, retail, customer";
         String updatedRewards = "reward, retail, customer, transaction";
@@ -100,7 +100,7 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void updateCustomerSubscription_Null() {
+    public void GivenUnknownCustomerData_WhenUpdateCustomerSubscriptionIsCalled_ThenNullIsReturned() {
 
         Long id = 5L;
 
@@ -124,7 +124,7 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void updateCustomerSubscription_Remove() {
+    public void GivenValidCustomerData_WhenUpdateCustomerSubscriptionIsCalled_ThenCustomerIsRemovedToTheSubscription() {
 
         String updatedRewards = "reward, retail, customer";
         String rewards = "reward, retail, customer, transaction";

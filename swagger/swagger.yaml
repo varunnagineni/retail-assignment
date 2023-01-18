@@ -89,20 +89,14 @@ paths:
             items:
               $ref: "#/definitions/Customer"
       responses:
-        "200":
-          description: OK
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Customer"
         "201":
           description: Created
           schema:
             type: array
             items:
               $ref: "#/definitions/Customer"
-        "404":
-          description: Not Found
+        "400":
+          description: Bad Request
   /transaction:
     put:
       tags:
@@ -148,16 +142,12 @@ paths:
           schema:
             $ref: "#/definitions/RewardTransaction"
       responses:
-        "200":
-          description: OK
-          schema:
-            $ref: "#/definitions/RewardTransaction"
         "201":
           description: Created
           schema:
             $ref: "#/definitions/RewardTransaction"
-        "404":
-          description: Not Found
+        "400":
+          description: Bad Request
   /summary/{id}:
     get:
       tags:
@@ -237,4 +227,3 @@ definitions:
       transStatus:
         type: string
         description: Status of the transaction. Can be Approve or Decline.
-      

@@ -7,21 +7,19 @@ import com.retail.rewards.service.TransactionRewardService;
 import com.retail.rewards.util.Constants;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.*;
 
 public class TransactionRewardsControllerTest {
 
@@ -39,67 +37,87 @@ public class TransactionRewardsControllerTest {
     }
 
     @Test
-    public void createTransaction_Success() {
-        RewardTransaction rewardTransaction = createTransaction(null, Long.valueOf(5), BigDecimal.valueOf(151.5)
+    public void GivenValidTransactionData_WhenCreateRewardTransactionIsCalled_Then201StatusCodeIsReturned() {
+        RewardTransaction rewardTransaction = createTransaction(null, 5L, BigDecimal.valueOf(151.5)
                 , Constants.TRANSACTION_APPROVED, BigDecimal.valueOf(0.0));
 
-        RewardTransaction createdTransaction = createTransaction( Long.valueOf(1), Long.valueOf(5), BigDecimal.valueOf(151.5)
+        RewardTransaction createdTransaction = createTransaction(1L, 5L, BigDecimal.valueOf(151.5)
                 , Constants.TRANSACTION_APPROVED, BigDecimal.valueOf(153));
 
         when(rewardServiceMock.createTransaction(rewardTransaction)).thenReturn(createdTransaction);
 
-        RewardTransaction transactions = transactionRewardsController.createRewardTransaction(rewardTransaction);
+        ResponseEntity<RewardTransaction> transaction = transactionRewardsController.createRewardTransaction(rewardTransaction);
         verify(rewardServiceMock, Mockito.times(1)).createTransaction(rewardTransaction);
 
-        assertEquals(createdTransaction, transactions);
-        assertEquals(0, transactions.getRewardsEarned().compareTo(createdTransaction.getRewardsEarned()), 0.0);
+        assertEquals(HttpStatus.CREATED, transaction.getStatusCode());
+        assertEquals(0, transaction.getBody().getRewardsEarned().compareTo(createdTransaction.getRewardsEarned()), 0.0);
     }
 
     @Test
-    public void createTransaction_Exception() {
-        IllegalArgumentException exp = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            transactionRewardsController.createRewardTransaction(null);
-        });
-        assertEquals("Transaction can't be null", exp.getMessage());
+    public void GivenInappropriateTransactionData_WhenCreateRewardTransactionIsCalled_ThenBadRequestIsReturned() {
+        RewardTransaction rewardTransaction = createTransaction(null, 5L, BigDecimal.valueOf(151.5)
+                , "", BigDecimal.valueOf(0.0));
+
+        when(rewardServiceMock.createTransaction(rewardTransaction)).thenReturn(null);
+
+        ResponseEntity<RewardTransaction> transaction = transactionRewardsController.createRewardTransaction(rewardTransaction);
+        assertEquals(HttpStatus.BAD_REQUEST, transaction.getStatusCode());
+        assertNull(transaction.getBody());
     }
 
     @Test
-    public void updateTransaction_Exception() {
-        IllegalArgumentException exp = assertThrows(IllegalArgumentException.class, () -> {
-            transactionRewardsController.updateRewardTransaction(null);
-        });
-        assertEquals("Transaction can't be null", exp.getMessage());
+    public void GivenNUllTransactionData_WhenUpdateRewardTransactionIsCalled_Then404StatusCodeIsReturned() {
+        RewardTransaction requestTransaction = createTransaction(120L, 5L, BigDecimal.valueOf(0.0)
+                , Constants.TRANSACTION_DECLINE, BigDecimal.valueOf(0.0));
+        when(rewardServiceMock.updateCustomerRewardTransaction(requestTransaction)).thenReturn(null);
+        ResponseEntity<RewardTransaction> finalTransaction = transactionRewardsController.updateRewardTransaction(requestTransaction);
+        verify(rewardServiceMock, times(1)).updateCustomerRewardTransaction(requestTransaction);
+        assertEquals(HttpStatus.NOT_FOUND, finalTransaction.getStatusCode());
+        assertNull(finalTransaction.getBody());
     }
 
     @Test
-    public void updateTransaction_Success() {
-        RewardTransaction updatedTransaction = createTransaction( Long.valueOf(1), Long.valueOf(5), BigDecimal.valueOf(151.5)
+    public void GivenValidTransactionData_WhenUpdateRewardTransactionIsCalled_Then200StatusCodeAndRewardTransactionIsUpdated() {
+        RewardTransaction updatedTransaction = createTransaction(1L, 5L, BigDecimal.valueOf(151.5)
                 , Constants.TRANSACTION_DECLINE, BigDecimal.valueOf(153));
 
-        RewardTransaction requestTransaction = createTransaction( Long.valueOf(1), Long.valueOf(5), BigDecimal.valueOf(0.0)
+        RewardTransaction requestTransaction = createTransaction(1L, 5L, BigDecimal.valueOf(0.0)
                 , Constants.TRANSACTION_DECLINE, BigDecimal.valueOf(0.0));
 
         when(rewardServiceMock.updateCustomerRewardTransaction(requestTransaction)).thenReturn(updatedTransaction);
-        RewardTransaction finalTransaction = transactionRewardsController.updateRewardTransaction(requestTransaction);
+        ResponseEntity<RewardTransaction> finalTransaction = transactionRewardsController.updateRewardTransaction(requestTransaction);
 
         verify(rewardServiceMock, times(1)).updateCustomerRewardTransaction(requestTransaction);
-        assertEquals(updatedTransaction, finalTransaction);
-        assertEquals(0, finalTransaction.getRewardsEarned().compareTo(updatedTransaction.getRewardsEarned()), 0.0);
-        assertEquals(updatedTransaction.getTransStatus(), finalTransaction.getTransStatus());
+
+        assertEquals(HttpStatus.OK, finalTransaction.getStatusCode());
+        assertEquals(0, finalTransaction.getBody().getRewardsEarned().compareTo(updatedTransaction.getRewardsEarned()), 0.0);
+        assertEquals(updatedTransaction.getTransStatus(), finalTransaction.getBody().getTransStatus());
     }
 
     @Test
-    public void getRewardSummary_Success() {
-        Long id = Long.valueOf(1);
+    public void GivenValidCustomerId_WhenGetRewardSummaryByCustIdIsCalled_Then200StatusCodeAndCustomerRewardSummaryListAreReturned() {
+        Long id = 1L;
         List<CustomerRewardSummary> customerRewardSummaryList = createCustomerRewardSummary();
 
         when(rewardServiceMock.getRewardSummary(id)).thenReturn(customerRewardSummaryList);
 
-        List<CustomerRewardSummary> custSummaryList = transactionRewardsController.getRewardSummaryByCustId(id);
+        ResponseEntity<List<CustomerRewardSummary>> custSummaryList = transactionRewardsController.getRewardSummaryByCustId(id);
 
         verify(rewardServiceMock, times(1)).getRewardSummary(id);
+        assertEquals(HttpStatus.OK, custSummaryList.getStatusCode());
+        assertEquals(customerRewardSummaryList.size(), custSummaryList.getBody().size());
+    }
 
-        assertEquals(customerRewardSummaryList.size(), custSummaryList.size());
+    @Test
+    public void GivenInValidCustomerId_WhenGetRewardSummaryByCustIdIsCalled_Then404StatusCodeAndCustomerRewardSummaryListAreReturned() {
+        Long id = 1L;
+
+        when(rewardServiceMock.getRewardSummary(id)).thenReturn(null);
+
+        ResponseEntity<List<CustomerRewardSummary>> custSummaryList = transactionRewardsController.getRewardSummaryByCustId(id);
+
+        verify(rewardServiceMock, times(1)).getRewardSummary(id);
+        assertEquals(HttpStatus.NOT_FOUND, custSummaryList.getStatusCode());
     }
 
     private RewardTransaction createTransaction (Long id, Long custId, BigDecimal transAmount
